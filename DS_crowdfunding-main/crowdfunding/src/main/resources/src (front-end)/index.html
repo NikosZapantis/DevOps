@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./img/favicon_circled.png">
+    <title>CrowdFunding Application</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./mainUI.css">
+    <link rel="stylesheet" href="./MainApp/homepage.css"> <!-- /MainApp -->
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand text-white" href="./index.html">
+                <img src="./img/favicon.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top" style="border-radius: 50%;">
+                CrowdFunding
+            </a>
+            <div id="headerRightContent" class="d-flex align-items-center"></div>
+        </div>
+    </nav>
+
+    <!-- Projects display area -->
+    <div class="container my-5">
+        <h1 class="text-center justify-content-center mb-4">Active Projects</h1>
+
+        <!-- Filter and New Project buttons -->
+        <div class="d-flex justify-content-between my-4">
+            <!-- New project -->
+            <button id="addNewButton" class="custom-button" data-bs-toggle="modal" data-bs-target="#addNewModal">
+                <i class="fa-solid fa-book-bookmark"></i> New project
+            </button>
+
+            <!-- Filter button for MyProjects / All projects display -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle custom-filter-btn" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="filterDropdown">
+                    <li><a class="dropdown-item active" href="#" id="filterAll">All Projects</a></li>
+                    <li><a class="dropdown-item" href="#" id="filterMyProjects">My Projects</a></li>
+                </ul>
+            </div>
+
+            <!-- Add new project Modal -->
+            <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addNewModalLabel">Add a new project</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addNewForm">
+                                <!-- Image -->
+                                <div class="custom-file-input-wrapper">
+                                    <label for="projectImage" class="custom-file-input mt-4">
+                                        <i class="fa-solid fa-upload"></i><br>Upload a photo (Optional)
+                                        <input type="file" class="form-control visually-hidden" id="projectImage" accept="image/*">
+                                    </label>
+                                </div>
+                                
+                                <!-- Title -->
+                                <div class="mb-3">
+                                    <label for="projectTitle" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="projectTitle" placeholder="Project Title" required>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="mb-3">
+                                    <label for="projectDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="projectDescription" placeholder="Project Description" rows="3" required></textarea>
+                                </div>
+
+                                <!-- Goal Amount -->
+                                <div class="mb-3">
+                                    <label for="projectGoal" class="form-label">Goal Amount [min: 1000$]</label>
+                                    <input type="number" class="form-control" id="projectGoal" min="1000" placeholder="Goal Amount" required>
+                                </div>
+
+                                <!-- Deadline -->
+                                <div class="mb-3">
+                                    <label for="projectDeadline" class="form-label">Deadline [at least 1 month from now]</label>
+                                    <input type="date" class="form-control" id="projectDeadline" required>
+                                </div>
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading spinner [Customized] -->
+        <div id="loadingSpinner" class="text-center my-5" style="display: none;">
+            <div class="custom-spinner" role="status">
+                <i class="fa-solid fa-spinner"></i>
+            </div>
+        </div>
+
+        <!-- No projects loaded -->
+        <div id="noProjectsMessage" class="text-center my-5" style="display: none;">
+            <h5>No projects currently on <strong style="color: var(--primary-color);">CrowdFunding</strong>. Stay tuned!</h5>
+            <p>Always remember to check your email for new project recommendations <i class="fa-solid fa-inbox"></i></p>
+        </div>
+
+        <div class="row" id="projectsContainer">
+            <!-- Project Cards will be displayed here parsed by js -->
+        </div>
+
+        <div id="pagination" class="d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                <!-- Pagination of projects -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Template for every single project cards -->
+    <template id="projectCardTemplate">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="" class="card-img-top" alt="">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between position-relative mb-2">
+                        <div class="d-flex align-items-center">
+                            <span class="status-circle me-2"></span>
+                            <span class="status-text text-muted small"></span>
+                        </div>
+                        <h5 class="card-title mx-auto mb-0 text-center"></h5>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 15px;">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="text-center mt-2 progress-text"></p>
+                    </div>
+                    <button class="btn btn-primary w-100">Check Project's Info</button>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    
+
+    <!-- Notification container -->
+    <div id="alertContainer" class="container my-3"></div>
+    
+    <!-- Footer -->
+    <!-- <br><br><br>
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 CrowdFunding App. All rights reserved.</p>
+    </footer> -->
+
+
+    <script type="text/javascript" src="./MainApp/homepage.js" defer></script> <!-- /MainApp -->
+    <!-- Boostrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

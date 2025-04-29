@@ -1,0 +1,50 @@
+/* Accordion container */
+.accordion-button {
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.accordion-button:hover {
+    background-color: var(--button-hover-bg-color);
+    color: var(--button-hover-color);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.6);
+}
+
+.accordion-body {
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    padding: 15px 25px;
+    border: 1px solid var(--divider-color);
+    border-radius: 5px;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--divider-color);
+}
+
+.accordion-header {
+    padding: 10px 15px;
+}
+
+/* Accordion collapsed state */
+.accordion-button.collapsed {
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+}
+
+/* Accordion item focus state */
+.accordion-item:focus-within .accordion-button {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
