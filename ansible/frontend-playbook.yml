@@ -1,0 +1,7 @@
+---
+- name: Deploy Frontend to Azure VM
+  hosts: frontend
+  become: true
+  roles:
+    - frontend
+    
