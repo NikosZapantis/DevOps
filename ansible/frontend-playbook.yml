@@ -1,5 +1,5 @@
 ---
-- name: Deploy Frontend to Azure VM
+- name: Deploy Node.js Frontend
   hosts: frontend
   become: true
   roles:
