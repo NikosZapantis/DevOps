@@ -1,0 +1,38 @@
+---
+- name: Install Node.js & npm
+  apt:
+    name: curl
+    state: present
+    update_cache: yes
+
+- name: Add NodeSource repo
+  shell: curl -sL https://deb.nodesource.com/setup_18.x | bash -
+  args:
+    executable: /bin/bash
+
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: present
+  
+- name: Copy frontend files
+  copy:
+    src: ../../../App/frontend/
+    dest: /home/ubuntu/frontend/
+    mode: '0755'
+    owner: ubuntu
+    group: ubuntu
+
+- name: Install npm dependencies
+  command: npm install
+  args:
+    chdir: /home/ubuntu/frontend/
+
+- name: Run serverInit.js with PM2
+  shell: |
+    npm install -g pm2
+    pm2 delete all || true
+    pm2 start serverInit.js --name frontend-server
+    pm2 save
+  args:
+    chdir: /home/ubuntu/frontend/
