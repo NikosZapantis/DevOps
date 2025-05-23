@@ -17,7 +17,7 @@
   
 - name: Copy frontend files
   copy:
-    src: ../../../App/frontend/
+    src: "{{ playbook_dir }}/../App/frontend/"
     dest: /home/ubuntu/frontend/
     mode: '0755'
     owner: ubuntu

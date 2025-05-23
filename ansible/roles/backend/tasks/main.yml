@@ -1,0 +1,36 @@
+---
+- name: Install Java (OpenJDK 21)
+  apt:
+    name: openjdk-21-jdk
+    state: present
+    update_cache: yes
+
+- name: Create backend app directory
+  file:
+    path: /home/ubuntu/backend/
+    state: directory
+    mode: '0755'
+
+- name: Copy backend code to VM
+  copy:
+    src: "{{ playbook_dir }}/../App/backend"
+    dest: /home/ubuntu/backend/
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
+- name: Build Spring Boot app (mvnw)
+  shell: ./mvnw clean package -DskipTests
+  args:
+    chdir: /home/ubuntu/backend/
+  environment: 
+    JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
+
+- name: Start Spring Boot JAR with PM2
+  shell: |
+    npm install -g pm2 
+    pm2 delete all || true
+    pm2 start target/*.jar --name backend-server --interpreter=none
+    pm2 save
+  args:
+    chdir: /home/ubuntu/backend/
