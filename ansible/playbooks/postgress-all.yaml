@@ -1,0 +1,34 @@
+---
+- hosts: dbservers
+  become: yes
+  become_user: root
+
+  pre_tasks:
+    - name: Install the PostgreSQL package
+      apt:
+        name: ["postgresql-contrib", "postgresql-client"]
+        state: present
+        update_cache: yes
+    
+    - name: install pip3
+      apt:
+        name: ["python3-pip"]
+        state: present
+        update_cache: yes
+    
+    - name: "Install Python packages"
+      pip:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - psycopg2-binary
+
+    - name: Get Ubuntu version
+      command: lsb_release -rs
+      register: ubuntu_version
+      changed_when: false
+      check_mode: false
+    
+    - name: debug ubuntu version
+      ansible.builtin.debug:
+        msg: "ubuntu version debug {{ubuntu_version}}"
