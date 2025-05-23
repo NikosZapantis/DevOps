@@ -1,0 +1,3 @@
+---
+- name: Restart frontend
+  shell: pm2 restart frontend-server
