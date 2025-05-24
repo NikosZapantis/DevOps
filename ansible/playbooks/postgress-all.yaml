@@ -98,19 +98,6 @@
       become_user: postgres
       notify: restart postgres
 
-    - name: "Allow md5 connection for the db user"
-      postgresql_pg_hba:
-        dest: "/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf"
-        contype: host
-        databases: all
-        source: 0.0.0.0/0
-        method: md5
-        users: "{{ db.user }}"
-        create: true
-      become: yes
-      become_user: postgres
-      notify: restart postgres
-
     - name: "Allow connections from all"
       lineinfile:
         path: "/etc/postgresql/{{ postgres_version }}/main/postgresql.conf"
