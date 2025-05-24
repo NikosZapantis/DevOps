@@ -1,10 +1,4 @@
 ---
-- name: Install Java (OpenJDK 21)
-  apt:
-    name: openjdk-21-jdk
-    state: present
-    update_cache: yes
-
 - name: Create backend app directory
   file:
     path: /home/ubuntu/backend/
@@ -34,16 +28,3 @@
     pm2 save
   args:
     chdir: /home/ubuntu/backend/
-
-#? Check it if it's needed inside the playbook instead of /tasks 
-- name: Install NGINX
-  apt:
-    name: nginx
-    state: present
-    update_cache: yes
-
-- name: Start NGINX
-  systemd:
-    name: nginx
-    state: started
-    enabled: true

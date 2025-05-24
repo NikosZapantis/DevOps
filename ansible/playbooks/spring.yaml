@@ -7,7 +7,7 @@
         name: openjdk-21-jdk
         state: present
         update_cache: yes
-      become: yes
+      become: true
 
   tasks:
     - name: Debug appdir
@@ -81,7 +81,7 @@
       template:
         src: ../files/spring.service.j2
         dest: "/etc/systemd/system/spring.service"
-      become: yes
+      become: true
       become_user: root
       notify: restart spring
 
@@ -89,40 +89,40 @@
       service:
         name: spring
         state: restarted
-      become: yes
+      become: true
 
     - name: ensure spring service started
       service:
         name: spring
         state: started
         enabled: yes
-      become: yes
+      become: true
 
     - name: "APT - install nginx"
       apt:
         name: nginx
         update_cache: yes
-      become: yes
+      become: true
 
     - name: copy nginx conf file
       template:
-        src: ../files/nginx.http.j2
+        src: ../roles/reverseproxy/nginx.conf.j2
         dest: "/etc/nginx/sites-available/spring"
-      become: yes
+      become: true
 
     - name: enable spring site in nginx
       file:
         src: "/etc/nginx/sites-available/spring"
         dest: "/etc/nginx/sites-enabled/spring"
         state: link
-      become: yes
+      become: true
       notify: restart nginx
 
     - name: de-activate default nginx site
       file:
         path: /etc/nginx/sites-enabled/default
         state: absent
-      become: yes
+      become: true
       notify: restart nginx
 
   handlers:
@@ -130,14 +130,11 @@
     service:
       name: spring
       state: restarted
-    become: yes
+    become: true
 
   - name: restart nginx
     service:
       name: nginx
       state: restarted
-    become: yes
-      
-
-
+    become: true
       
