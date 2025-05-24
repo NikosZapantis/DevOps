@@ -34,3 +34,16 @@
     pm2 save
   args:
     chdir: /home/ubuntu/backend/
+
+#? Check it if it's needed inside the playbook instead of /tasks 
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Start NGINX
+  systemd:
+    name: nginx
+    state: started
+    enabled: true
