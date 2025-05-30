@@ -18,15 +18,15 @@
 - name: Copy frontend files
   copy:
     src: "{{ playbook_dir }}/../App/frontend/"
-    dest: /home/ubuntu/frontend/
+    dest: /home/azureuser/frontend/
     mode: '0755'
-    owner: ubuntu
-    group: ubuntu
+    owner: azureuser
+    group: azureuser
 
 - name: Install npm dependencies
   command: npm install
   args:
-    chdir: /home/ubuntu/frontend/
+    chdir: /home/azureuser/frontend/
 
 - name: Run serverInit.js with PM2
   shell: |
@@ -35,4 +35,4 @@
     pm2 start serverInit.js --name frontend-server
     pm2 save
   args:
-    chdir: /home/ubuntu/frontend/
+    chdir: /home/azureuser/frontend/
