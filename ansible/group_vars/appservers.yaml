@@ -3,9 +3,10 @@ branch: "api"
 appuser: "{{ ansible_user_id }}"
 appgroup: "{{ ansible_user_gid }}"
 app_port: 8080
-#backend_server_url: "http://???"
+backend_server_url: "http://13.79.74.95:8080"
 
 app:
+  VITE_BACKEND: "http://13.79.74.95:8080"
   env:
     server.port: "{{ app_port }}"
     spring.datasource.username: devopsuser
