@@ -7,8 +7,6 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     env_file:
       - .env
-    depends_on:
-      - db
   
   frontend:
     build:
@@ -19,27 +17,9 @@ services:
     env_file:
       - .env
 
-# Maybe to remove [Tockech based on the project DOM if we already connect the database inside our backend]
-  db:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
   mailhog:
     image: mailhog/mailhog
     container_name: mailhog
     ports:
       - "8025:8025"
       - "1025:1025"
-
-volumes:
-  db_data:
-    driver: local # [Tockech] if it's needed

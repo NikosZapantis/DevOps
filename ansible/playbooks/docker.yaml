@@ -50,3 +50,18 @@
         groups: docker
         append: yes
       become: yes
+
+    - name: Copy docker-compose file
+      copy:
+        src: "{{ playbook_dir }}/../../docker/docker-compose.yaml"
+        dest: /home/{{ ansible_user_id }}/docker-compose.yaml
+        owner: "{{ ansible_user_id }}"
+        group: docker
+        mode: '0644'
+      become: yes
+
+    - name: Run docker-compose 
+      command: docker-compose up -d
+      args:
+        chdir: /home/{{ ansible_user_id }}
+      become: yes
