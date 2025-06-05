@@ -1,22 +1,22 @@
 ---
 - name: Create backend app directory
   file:
-    path: /home/ubuntu/backend/
+    path: /home/azureuser/backend/
     state: directory
     mode: '0755'
 
 - name: Copy backend code to VM
   copy:
     src: "{{ playbook_dir }}/../App/backend"
-    dest: /home/ubuntu/backend/
-    owner: ubuntu
-    group: ubuntu
+    dest: /home/azureuser/backend/
+    owner: azureuser
+    group: azureuser
     mode: '0755'
 
 - name: Build Spring Boot app (mvnw)
   shell: ./mvnw clean package -DskipTests
   args:
-    chdir: /home/ubuntu/backend/
+    chdir: /home/azureuser/backend/
   environment: 
     JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
 
@@ -27,4 +27,4 @@
     pm2 start target/*.jar --name backend-server --interpreter=none
     pm2 save
   args:
-    chdir: /home/ubuntu/backend/
+    chdir: /home/azureuser/backend/

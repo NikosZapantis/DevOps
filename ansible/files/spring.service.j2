@@ -3,10 +3,10 @@ Description=spring boot daemon
 After=network.target
 
 [Service]
-User={{appuser}}
-Group={{appgroup}}
-WorkingDirectory={{service.workingdir}}
-ExecStart={{service.execstart}}
+User=azureuser
+Group=azureuser
+WorkingDirectory=/home/azureuser/backend/crowdfunding
+ExecStart=/usr/bin/java - jar /home/azureuser/backend/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar
 
 [Install]
 WantedBy=multi-user.target
