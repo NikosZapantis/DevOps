@@ -18,25 +18,32 @@
       become: true
 
   tasks:
-    - name: Debug appdir
-      ansible.builtin.debug:
-        msg: "appdir {{ansible_user_dir}}"
-    
-    # - name: Remove existing backend directory
-    #   file:
-    #     path: "/home/azureuser/backend/"
-    #     state: absent
-    #   become: true
+    - name: Archive Spring Project locally
+      delegate_to: localhost
+      run_once: true
+      command: >
+        tar --exclude='target' --exclude='.git' -czf /tmp/backend.tar.gz -C ../App/backend/ .
 
-    - name: Clone the Spring repository
-      git:
-        # might need to be repo: "https://github.com/NikosZapantis/DevOps.git"
-        repo: "https://github.com/NikosZapantis/DS_crowdfunding.git"
+    - name: Copy backend archive to VM
+      copy:
+        src: /tmp/backend.tar.gz
+        dest: /tmp/backend.tar.gz
+
+    - name: Extract backend archive
+      unarchive:
+        src: /tmp/backend.tar.gz
         dest: "/home/azureuser/backend/"
-        version: main
-        force: yes
+        remote_src: yes
+        owner: azureuser
+        group: azureuser
+      become: true      
 
-    - name: Make mvnw exec 
+    - name: Delete remote archive
+      file:
+        path: /tmp/backend.tar.gz
+        state: absent
+
+    - name: Set execute permission for mvnw
       file:
         path: "{{ appdir }}/mvnw"
         mode: '0755'
@@ -58,12 +65,7 @@
         command: "./mvnw clean package -Dmaven.test.skip"
         args:
           chdir: "{{ appdir }}"
-      
-#      - name: Run the Spring application
-#       command: "java -jar /target/crowdfunding-0.0.1-SNAPSHOT.jar"
-#       args:
-#          chdir: "{{ appdir }}"
-
+    
       rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
@@ -127,12 +129,6 @@
         src: roles/reverseproxy/nginx.js.j2
         dest: "/etc/nginx/sites-available/spring"
       become: true
-
-    # - name: copy nginx conf file [frontend]
-    #   template:
-    #     src: roles/reverseproxy/nginx.http.j2
-    #     dest: "/etc/nginx/sites-available/frontend"
-    #   become: true
 
     - name: enable spring site in nginx
       file:
