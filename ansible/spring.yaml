@@ -1,6 +1,14 @@
 ---
 - hosts: all
 
+  vars:
+    appdir: "/home/azureuser/backend/crowdfunding"
+    app:
+      env:
+        SPRING_DATASOURCE_URL: "jdbc:postgresql://dpg-d0oa61juibrs73a8nne0-a.oregon-postgres.render.com:5432/devopsdb_n794"
+        SPRING_DATASOURCE_USERNAME: devopsuser
+        SPRING_DATASOURCE_PASSWORD: RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
+
   pre_tasks:
     - name: Install java
       apt:
@@ -10,17 +18,35 @@
       become: true
 
   tasks:
-    - name: Debug appdir
-      ansible.builtin.debug:
-        msg: "appdie {{ansible_user_dir}}"
-    
-    - name: Clone the Spring repository
-      git:
-        # might need to be repo: "https://github.com/NikosZapantis/DevOps.git"
-        repo: "https://github.com/NikosZapantis/DS_crowdfunding.git"
-        dest: "{{ appdir }}"
-        version: main
-        force: yes
+    - name: Archive Spring Project locally
+      delegate_to: localhost
+      run_once: true
+      command: >
+        tar --exclude='target' --exclude='.git' -czf /tmp/backend.tar.gz -C ../App/backend/ .
+
+    - name: Copy backend archive to VM
+      copy:
+        src: /tmp/backend.tar.gz
+        dest: /tmp/backend.tar.gz
+
+    - name: Extract backend archive
+      unarchive:
+        src: /tmp/backend.tar.gz
+        dest: "/home/azureuser/backend/"
+        remote_src: yes
+        owner: azureuser
+        group: azureuser
+      become: true      
+
+    - name: Delete remote archive
+      file:
+        path: /tmp/backend.tar.gz
+        state: absent
+
+    - name: Set execute permission for mvnw
+      file:
+        path: "{{ appdir }}/mvnw"
+        mode: '0755'
 
     - name: Populate application.properties
       lineinfile:
@@ -35,16 +61,11 @@
     - name: Build the Spring project
       block:
 
-      - name: Buid the Spring application
+      - name: Build the Spring application
         command: "./mvnw clean package -Dmaven.test.skip"
         args:
           chdir: "{{ appdir }}"
-      
-#      - name: Run the Spring application
-#       command: "java -jar /target/crowdfunding-0.0.1-SNAPSHOT.jar"
-#       args:
-#          chdir: "{{ appdir }}"
-
+    
       rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
@@ -76,10 +97,9 @@
           args:
               chdir: "{{ appdir }}"
 
-
     - name: copy spring service file
       template:
-        src: ../files/spring.service.j2
+        src: files/spring.service.j2
         dest: "/etc/systemd/system/spring.service"
       become: true
       become_user: root
@@ -104,9 +124,9 @@
         update_cache: yes
       become: true
 
-    - name: copy nginx conf file
+    - name: copy nginx conf file [backend]
       template:
-        src: ../roles/reverseproxy/nginx.conf.j2
+        src: roles/reverseproxy/nginx.js.j2
         dest: "/etc/nginx/sites-available/spring"
       become: true
 
@@ -137,4 +157,5 @@
       name: nginx
       state: restarted
     become: true
+
       
