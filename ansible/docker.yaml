@@ -1,0 +1,115 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+    docker_user: "{{ ansible_user_id }}"
+    docker_project_path: "/home/{{ ansible_user_id }}/app"
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - software-properties-common
+          - curl
+          - apt-transport-https
+          - ca-certificates
+        state: present
+        update_cache: true
+      
+    - name: Manually Add docker GPG key
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/docker-archive-keyring.gpg
+
+    - name: Add docker repository
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable"
+        state: present
+        filename: docker
+        update_cache: yes
+
+    - name: Install Docker CE and Compose plugin
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add existing user to group docker
+      user:
+        name: "{{  docker_user }}"
+        groups: docker
+        append: yes
+
+    - name: Create deployment directory
+      file:
+        path: "{{ docker_project_path }}"
+        state: directory
+        owner: "{{ docker_user }}"
+        group: docker
+        mode: '0755'
+
+    - name: Synchronize entire docker project directory
+      synchronize:
+        src: "{{ playbook_dir }}/.."
+        dest: "{{ docker_project_path }}"
+        recursive: yes
+        delete: no
+        rsync_opts:
+          - "--chmod=Du=rwx,Dg=rx,Fu=rw,Fg=r,Fo=r"
+
+    - name: Check if backend folder exists on remote
+      stat:
+        path: "{{ docker_project_path }}/backend"
+      register: backend_status
+
+    - name: Check if frontend folder exists on remote
+      stat:
+        path: "{{ docker_project_path }}/frontend"
+      register: frontend_status
+
+    - name: Synchronize backend folder (only if missing)
+      synchronize:
+        src: "{{ playbook_dir }}/../App/backend"
+        dest: "{{ docker_project_path }}/backend"
+        recursive: yes
+      when: not backend_status.stat.exists
+
+    - name: Synchronize frontend folder (only if missing)
+      synchronize:
+        src: "{{ playbook_dir }}/../App/frontend"
+        dest: "{{ docker_project_path }}/frontend"
+        recursive: yes
+      when: not frontend_status.stat.exists
+
+    - name: Stop existing containers
+      command: docker compose down
+      args:
+        chdir: "{{ docker_project_path }}/docker"
+      ignore_errors: yes
+
+    - name: Find process using port 8080
+      shell: |
+        lsof -ti :8080 || true
+      register: port_8080_pid
+      changed_when: false
+      
+    - name: Kill process using port 8080
+      command: kill -9 {{ port_8080_pid.stdout }}
+      when: port_8080_pid.stdout != ""
+      ignore_errors: yes
+
+    - name: Run docker compose 
+      command: docker compose up -d
+      args:
+        chdir: "{{ docker_project_path }}/docker"
