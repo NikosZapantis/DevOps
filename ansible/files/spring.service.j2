@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=azureuser
 Group=azureuser
-WorkingDirectory=/home/azureuser/backend/crowdfunding
-ExecStart=/usr/bin/java -jar /home/azureuser/backend/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar
+WorkingDirectory=/home/azureuser/backend/DS_crowdfunding/crowdfunding
+ExecStart=/usr/bin/java -jar /home/azureuser/backend/DS_crowdfunding/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar
 SuccessExitStatus=143
 Restart=on-failure
 RestartSec=10

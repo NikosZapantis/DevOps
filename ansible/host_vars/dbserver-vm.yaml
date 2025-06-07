@@ -1,4 +1,4 @@
 db:
-  name: devopsuser
-  user: RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
-  password: "jdbc:postgresql://dpg-d0oa61juibrs73a8nne0-a.oregon-postgres.render.com:5432/devopsdb_n794"
+  name: devopsdb_n794
+  user: devopsuser
+  password: RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
