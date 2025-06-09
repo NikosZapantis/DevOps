@@ -15,7 +15,7 @@ async function fetchReports(projectId) {
 
     try {
         // Calling the API to get the reports for the given project ID
-        const response = await fetch(`http://localhost:8080/api/report/${projectId}/all`, {
+        const response = await fetch(`/api/report/${projectId}/all`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`, // Including the token for authentication
             },

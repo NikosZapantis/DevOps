@@ -26,9 +26,9 @@ async function displayProjects() {
 
         // Determining the endpoint based on the filter type [Optimized]
         const endpoints = {
-            myProjects: "http://localhost:8080/api/project/personal",
-            Pending: isAdmin ? "http://localhost:8080/api/project/all/PENDING" : null,
-            all: "http://localhost:8080/api/project/all"
+            myProjects: "/api/project/personal",
+            Pending: isAdmin ? "/api/project/all/PENDING" : null,
+            all: "/api/project/all"
         };
         endpoint = endpoints[currentFilter] || endpoints.all;
 
@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             try {
-                const response = await fetch("http://localhost:8080/api/project/new", {
+                const response = await fetch("/api/project/new", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
