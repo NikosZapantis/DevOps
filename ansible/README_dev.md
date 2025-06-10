@@ -1,6 +1,7 @@
 # How to execute (example):
 
 `ansible-playbook -i inventory.ini frontend-playbook.yaml`
+`ansible-playbook -i inventory.ini docker.yaml`
 
 You can simply ping the VM (for testing if it's up or not):
 `ansible -i inventory.ini frontend -m ping`
