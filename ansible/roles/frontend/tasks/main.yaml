@@ -1,7 +1,13 @@
 ---
-- name: Install Node.js & npm
+- name: Ensure curl is installed
   apt:
     name: curl
+    state: present
+    update_cache: yes
+
+- name: Ensure rsync is installed
+  apt:
+    name: rsync
     state: present
     update_cache: yes
 
@@ -14,11 +20,11 @@
   apt:
     name: nodejs
     state: present
-  
+
 - name: Copy frontend files
   copy:
-    src: "{{ playbook_dir }}/../App/frontend/"
-    dest: /home/azureuser/frontend/
+    src: "{{ frontend_src }}/"
+    dest: "{{ frontend_dest }}/"
     mode: '0755'
     owner: azureuser
     group: azureuser
@@ -26,13 +32,47 @@
 - name: Install npm dependencies
   command: npm install
   args:
-    chdir: /home/azureuser/frontend/
+    chdir: "{{ frontend_dest }}/"
 
-- name: Run serverInit.js with PM2
-  shell: |
-    npm install -g pm2
-    pm2 delete all || true
-    pm2 start serverInit.js --name frontend-server
-    pm2 save
+- name: Install pm2 globally
+  npm:
+    name: pm2
+    global: yes
+
+- name: Stop existing pm2 process
+  shell: pm2 delete all || true
   args:
-    chdir: /home/azureuser/frontend/
+    chdir: "{{ frontend_dest }}/"
+
+- name: Start serverInit.js with pm2
+  command: pm2 start serverInit.js --name frontend-server
+  args:
+    chdir: "{{ frontend_dest }}/"
+
+- name: Save pm2 proccess list
+  command: pm2 save
+  args:
+    chdir: "{{ frontend_dest }}/"
+  ignore_errors: true
+  
+- name: Create Nginx web root directory
+  file:
+    path: "{{ nginx_static_root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Copy built frontend files to Nginx root
+  copy:
+    src: "{{ frontend_dest }}/"
+    dest: "{{ nginx_static_root }}/"
+    owner: www-data
+    group: www-data
+    mode: '0755'
+    remote_src: yes
+
+- name: Reload Nginx to serve new frontend
+  service:
+    name: nginx
+    state: reloaded 

@@ -2,6 +2,13 @@
 - name: Deploy Node.js Frontend
   hosts: general
   become: true
+
+  vars:
+    frontend_src: "{{ playbook_dir }}/../App/frontend/"
+    frontend_dest: /home/azureuser/frontend/
+    frontend_build_dest: /home/azureuser/frontend/build
+    nginx_static_root: /var/www/frontend
+
   roles:
     - frontend
     
