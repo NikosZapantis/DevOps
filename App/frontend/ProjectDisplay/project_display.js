@@ -25,7 +25,7 @@ async function displayProjectInfo() {
 
     try {
         // Fetching project details from the backend
-        const response = await fetch(`http://localhost:8080/api/project/${projectId}`);
+        const response = await fetch(`/api/project/${projectId}`);
         if (!response.ok) throw new Error('Failed to fetch project details.');
 
         const project = await response.json();
@@ -130,7 +130,7 @@ async function displayProjectInfo() {
 //? Function to approve a project
 async function approveProject(projectId) {
     try {
-        const response = await fetch(`http://localhost:8080/api/project/${projectId}/update-status`, {
+        const response = await fetch(`/api/project/${projectId}/update-status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ async function approveProject(projectId) {
 async function rejectProject(projectId) {
 
     try {
-        const response = await fetch(`http://localhost:8080/api/project/${projectId}/delete`, {
+        const response = await fetch(`/api/project/${projectId}/delete`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`
@@ -179,7 +179,7 @@ async function rejectProject(projectId) {
 async function toggleProjectStatus(projectId, currentStatus) {
     try {
         // Calling the update-status endpoint
-        const response = await fetch(`http://localhost:8080/api/project/${projectId}/update-status`, {
+        const response = await fetch(`/api/project/${projectId}/update-status`, {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`
@@ -208,7 +208,7 @@ async function fundProject(projectId, amount, message) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/fund/${projectId}/new`, {
+        const response = await fetch(`/api/fund/${projectId}/new`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ async function fundProject(projectId, amount, message) {
 //? Function to submit a report
 async function submitReport(projectId, title, description) {
     try {
-        const response = await fetch(`http://localhost:8080/api/report/${projectId}/new`, {
+        const response = await fetch(`/api/report/${projectId}/new`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

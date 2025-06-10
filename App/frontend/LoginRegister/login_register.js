@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('http://localhost:8080/api/auth/signin', {
+        const response = await fetch('/api/auth/signin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
     try {
         // Sending POST request to the signup endpoint
-        const response = await fetch('http://localhost:8080/api/auth/signup', {
+        const response = await fetch('/api/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json',
