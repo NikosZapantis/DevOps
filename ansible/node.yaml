@@ -60,7 +60,7 @@
 
     - name: Copy NGINX config for Node.js app
       template:
-        src: ./roles/reverseproxy/nginx.http.j2
+        src: ./reverseproxy/nginx.http.j2
         dest: /etc/nginx/sites-available/spring
 
     - name: Enable Node.js site in NGINX
