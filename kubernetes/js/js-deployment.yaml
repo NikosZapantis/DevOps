@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javascript
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: javascript
+  template:
+    metadata:
+      labels:
+        app: javascript
+    spec:
+      containers:
+        - name: javascript
+          image: ghcr.io/your-username/your-javascript-app:latest #TODO: Update with our image
+          ports:
+            - containerPort: 80
