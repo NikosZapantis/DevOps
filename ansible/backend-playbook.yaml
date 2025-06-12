@@ -1,6 +1,0 @@
----
-- name: Deploy Spring Boot Backend
-  hosts: general
-  become: true
-  roles:
-    - backend

@@ -1,3 +1,0 @@
----
-- name: Restart backend service
-  shell: pm2 restart backend-server
