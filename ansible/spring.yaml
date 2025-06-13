@@ -9,7 +9,6 @@
           SPRING_DATASOURCE_PASSWORD: RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
           SPRING_DATASOURCE_URL: "jdbc:postgresql://dpg-d0oa61juibrs73a8nne0-a.oregon-postgres.render.com:5432/devopsdb_n794"
           
-
   pre_tasks:
     - name: Install Java
       apt:
@@ -140,7 +139,7 @@
 
       - name: copy nginx conf file
         template:
-          src: ./roles/reverseproxy/nginx.http.j2
+          src: ./reverseproxy/nginx.http.j2
           dest: "/etc/nginx/sites-available/spring"
         become: yes
 

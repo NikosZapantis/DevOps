@@ -1,7 +1,0 @@
----
-- name: Deploy Node.js Frontend
-  hosts: general
-  become: true
-  roles:
-    - frontend
-    
