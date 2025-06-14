@@ -16,13 +16,13 @@
     - name: Copy NGINX configuration file
       copy:
         src: "{{ playbook_dir }}/reverseproxy/nginx.node.j2"
-        dest: /etc/nginx/sites-available/app
+        dest: /etc/nginx/sites-available/spring
       notify: restart nginx
 
     - name: Enable reverse proxy conf
       file:
-        src: /etc/nginx/sites-available/app
-        dest: /etc/nginx/sites-enabled/app
+        src: /etc/nginx/sites-available/spring
+        dest: /etc/nginx/sites-enabled/spring
         state: link
       notify: restart nginx
     
