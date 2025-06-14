@@ -1,8 +1,9 @@
----
+--- #?file will be moved to playbook directory when optimising
 - hosts: all
 
-  vars:
+  vars: #? will be moved to group_vars/azure-hosts.yaml when optimising
       appdir: "/home/azureuser/backend/DS_crowdfunding"
+      branch: "main"
       app:
         env:
           SPRING_DATASOURCE_USERNAME: devopsuser
@@ -18,7 +19,7 @@
       become: yes
 
   tasks:
-      - name: "debug appdir"
+      - name: "debug appdir" #? may be removed later - no use?
         ansible.builtin.debug:
           msg: "appdir {{ansible_user_dir}}"
 
@@ -33,10 +34,10 @@
         git:
             repo: "https://github.com/NikosZapantis/DS_crowdfunding.git"
             dest: "{{ appdir }}"
-            version: main
+            version: "{{ branch }}"
             force: yes
 
-      - name: "Populate application.properties"
+      - name: "Populate application.properties" #? will need to be optimised at some point
         copy:
           dest: "{{ appdir }}/crowdfunding/src/main/resources/application.properties"
           content: |
@@ -131,32 +132,32 @@
           enabled: yes
         become: yes
 
-      - name: "APT - install nginx"
-        apt:
-          name: nginx
-          update_cache: yes
-        become: yes
+      # - name: "APT - install nginx"
+      #   apt:
+      #     name: nginx
+      #     update_cache: yes
+      #   become: yes
 
-      - name: copy nginx conf file
-        template:
-          src: ./reverseproxy/nginx.http.j2
-          dest: "/etc/nginx/sites-available/spring"
-        become: yes
+      # - name: copy nginx conf file
+      #   template:
+      #     src: ./reverseproxy/nginx.http.j2
+      #     dest: "/etc/nginx/sites-available/spring"
+      #   become: yes
 
-      - name: enable spring site in nginx
-        file:
-          src: "/etc/nginx/sites-available/spring"
-          dest: "/etc/nginx/sites-enabled/spring"
-          state: link
-        become: yes
-        notify: restart nginx
+      # - name: enable spring site in nginx
+      #   file:
+      #     src: "/etc/nginx/sites-available/spring"
+      #     dest: "/etc/nginx/sites-enabled/spring"
+      #     state: link
+      #   become: yes
+      #   notify: restart nginx
 
-      - name: de-activate default nginx site
-        file:
-          path: /etc/nginx/sites-enabled/default
-          state: absent
-        become: yes
-        notify: restart nginx
+      # - name: de-activate default nginx site
+      #   file:
+      #     path: /etc/nginx/sites-enabled/default
+      #     state: absent
+      #   become: yes
+      #   notify: restart nginx
 
   handlers:
   - name: restart spring

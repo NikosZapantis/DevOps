@@ -6,6 +6,12 @@
 You can simply ping the VM (for testing if it's up or not):
 `ansible -i inventory.ini frontend -m ping`
 
+# How to stop ports (with ssh):
+
+`sudo systemctl stop spring`
+`pm2 stop all`
+`sudo systemctl stop nginx`
+
 # Playbooks:
 
 - **roles/frontend/tasks/main.yml** – Sets up the frontend on the VM.
