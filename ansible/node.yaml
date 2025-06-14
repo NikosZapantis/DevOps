@@ -3,7 +3,7 @@
   hosts: all
   become: true
 
-  vars:
+  vars: #? will be moved to group_vars/azure-hosts.yaml when optimising
     frontend_dir: /home/azureuser/frontend
 
   tasks:
@@ -37,6 +37,12 @@
         mode: '0755'
         owner: azureuser
         group: azureuser
+    
+    - name: Allow others to execute /home/azureuser so nginx can access frontend
+      file:
+        path: /home/azureuser
+        mode: '0751'
+        state: directory
 
     - name: Install npm dependencies
       command: npm install
@@ -60,14 +66,17 @@
 
     - name: Copy NGINX config for Node.js app
       template:
-        src: ./reverseproxy/nginx.http.j2
+        src: ./reverseproxy/nginx.node.j2
         dest: /etc/nginx/sites-available/spring
+      become: yes
 
     - name: Enable Node.js site in NGINX
       file:
         src: /etc/nginx/sites-available/spring
         dest: /etc/nginx/sites-enabled/spring
         state: link
+      become: yes
+      notify: restart nginx
 
     - name: Disable default NGINX site
       file:
