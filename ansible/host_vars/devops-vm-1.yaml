@@ -1,15 +1,10 @@
-appdir: "/home/azureuser/backend/"
-branch: "main"
-appuser: azureuser
-appgroup: azureuser
-app_port: 8080
-backend_server_url: "http://135.116.56.86:8080"
-
 app:
-  #VITE_BACKEND: "http://135.116.56.86:8080"
   env:
     server.port: 8080
     spring.datasource.username: devopsuser
     spring.datasource.password: RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
     spring.datasource.url: "jdbc:postgresql://dpg-d0oa61juibrs73a8nne0-a.oregon-postgres.render.com:5432/devopsdb_n794"
 
+service:
+  workdir: /home/azureuser/backend/
+  execstart: "/home/azureuser/backend/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar"
