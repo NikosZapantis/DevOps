@@ -3,8 +3,8 @@
   become: true
 
   vars:
-    docker_user: "{{ ansible_user_id }}"
-    docker_project_path: "/home/{{ ansible_user_id }}/docker"
+    docker_user: "{{ ansible_user }}"
+    docker_project_path: "/home/{{ ansible_user }}/docker"
 
   tasks:
     - name: Install NGINX

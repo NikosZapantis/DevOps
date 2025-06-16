@@ -4,7 +4,7 @@
   become: true
 
   vars: #? will be moved to group_vars/azure-hosts.yaml when optimising
-    frontend_dir: /home/azureuser/frontend
+    frontend_dir: /home/{{ ansible_user }}/frontend
 
   tasks:
     - name: Update apt cache and install curl
