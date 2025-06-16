@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ../app/backend
+      context: ../App/backend
     container_name: backend
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
@@ -10,7 +10,7 @@ services:
   
   frontend:
     build:
-      context: ../app/frontend
+      context: ../App/frontend
     container_name: frontend
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
