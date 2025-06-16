@@ -2,7 +2,7 @@
 - hosts: all
 
   vars: #? will be moved to group_vars/azure-hosts.yaml when optimising
-      appdir: "/home/azureuser/backend/DS_crowdfunding"
+      appdir: "/home/{{ ansible_user }}/backend/DS_crowdfunding"
       branch: "main"
       app:
         env:
@@ -26,7 +26,7 @@
 
       - name: Remove backend directory if exists
         file:
-          path: /home/azureuser/backend
+          path: /home/{{ ansible_user }}/backend
           state: absent
         become: true
 
