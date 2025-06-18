@@ -163,6 +163,17 @@ async function rejectProject(projectId) {
         });
 
         if (response.ok) {
+            await fetch('/send-email', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: email, //TODO: Save the email to sessionStorage
+                    subject: 'Project Rejected',
+                    text: `The project you reviewed was successfully rejected. Thank you for using our platform! 
+                            For further information with our team the project ID was: ${projectId}\n\nBest regards,\nCrowdFunding App Team`,
+                }),
+            });
+
             showAlert('Project rejected and deleted successfully.', "success", 3000);
             window.location.href = '../index.html'; // Redirecting to the homepage
         } else {
@@ -222,6 +233,16 @@ async function fundProject(projectId, amount, message) {
         });
 
         if (response.ok) {
+            await fetch('/send-email', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: email, //TODO: Save the email to sessionStorage
+                    subject: 'Your help is appreciated!',
+                    text: `Your fund was made successfully\n\nThank you for helping our platform's member to reach their goals.\n\nBest regards,\nCrowdFunding App Team`,
+                }),
+            });
+
             showAlert('Funding submitted successfully!', "success", 3000);
             const modal = bootstrap.Modal.getInstance(document.getElementById('fundProjectModal'));
             modal.hide(); // Closing the modal
@@ -251,6 +272,16 @@ async function submitReport(projectId, title, description) {
         });
 
         if (response.ok) {
+            await fetch('/send-email', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: email,
+                    subject: 'Your report has been submitted',
+                    text: `Your feedback is useful!\n\nReports helps our team to maintain a clean and user-friendly community.\n\nBest regards,\nCrowdFunding App Team`,
+                }),
+            });
+
             showAlert('Report submitted successfully.', "success", 3000);
             const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
             modal.hide();

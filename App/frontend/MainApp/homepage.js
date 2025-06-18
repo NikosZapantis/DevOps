@@ -358,6 +358,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     showAlert("Project created successfully!", "success", 3000);
 
+                    await fetch('/send-email', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            to: email, //TODO: Save on sessionStorage the email too
+                            subject: 'Project created successfully!',
+                            text: `Hello ${username},\n\nYour project was succesfully created and uploaded! We hope you reach your goal soon.\n\nBest regards,\nCrowdFunding App Team`,
+                        }),
+                    });
+
                     // Closing modal and reset form
                     bootstrap.Modal.getInstance(document.getElementById("addNewModal")).hide();
                     addNewForm.reset();
