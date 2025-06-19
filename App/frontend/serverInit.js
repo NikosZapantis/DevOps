@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 // Nodemailer transporter configuration for mailhog 
 const transp = nodemailer.createTransport({
-    host: 'mailog',
+    host: 'mailhog',
     port: 1025,
     secure: false,
     tls: {
