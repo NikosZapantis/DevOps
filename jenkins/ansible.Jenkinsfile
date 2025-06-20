@@ -8,14 +8,14 @@ pipeline {
         booleanParam(name: 'INSTALL_NODE', defaultValue: true, description: 'Install Node.js app')
     }
 
-    stages {
-
-        agent {
-            docker {
-                image 'willhallonline/ansible:latest' 
-                args '-u root' 
-            }
+    agent {
+        docker {
+            image 'willhallonline/ansible:latest' 
+            args '-u root' 
         }
+    }
+
+    stages {
 
         stage('Check Ansible') {
             steps {
