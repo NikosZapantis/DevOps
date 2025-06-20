@@ -54,7 +54,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    export ANSIBLE_CONFIG= ~/var/lib/jenkins/workspace/ansible-job/ansible.cfg
+                    export ANSIBLE_CONFIG= ~/workspace/ansible-job/ansible.cfg
                     ansible-playbook -i ~/workspace/ansible-job/inventory.ini /workspace/ansible-job/spring.yaml
                 '''
             }
