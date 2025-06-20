@@ -42,6 +42,7 @@
           dest: "{{ appdir }}/crowdfunding/src/main/resources/application.properties"
           content: |
             spring.application.name=gotham_2wzk
+            server.port=8081
 
             spring.datasource.username=devopsuser
             spring.datasource.password=RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
