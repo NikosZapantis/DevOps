@@ -54,8 +54,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini /workspace/ansible-job/playbooks/spring.yaml
+                    export ANSIBLE_CONFIG= ~/var/lib/jenkins/workspace/ansible-job/ansible.cfg
+                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini /workspace/ansible-job/spring.yaml
                 '''
             }
         }
@@ -66,8 +66,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini -l appserver-vm ~/workspace/ansible-job/playbooks/node.yaml
+                    export ANSIBLE_CONFIG= ~/var/lib/jenkins/workspace/ansible-job/ansible.cfg
+                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini -l appserver-vm ~/workspace/ansible-job/node.yaml
                 '''
             }
         }
