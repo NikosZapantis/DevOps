@@ -11,14 +11,14 @@ pipeline {
     
         stage('run ansible pipeline') {
             steps {
-                build job: 'ansible'
+                build job: 'ansible-job'
             }
         }
 
         stage('test connection to deploy env') {
         steps {
             sh '''
-                ansible -i ~/workspace/ansible-job/inventory.ini -m ping appserver-vm,dbserver-vm
+                ansible -i ~/workspace/ansible-job/inventory.ini 
             '''
             }
         }
@@ -42,7 +42,7 @@ pipeline {
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini -l appserver-vm ~/workspace/ansible-job/playbooks/spring.yaml
+                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini /workspace/ansible-job/playbooks/spring.yaml
                 '''
             }
         }
@@ -50,9 +50,6 @@ pipeline {
         stage('deploy frontend') {
              when {
                 expression { return params.INSTALL_SPRING }
-             when {
-                expression { return params.INSTALL_SPRING }
-            }
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
