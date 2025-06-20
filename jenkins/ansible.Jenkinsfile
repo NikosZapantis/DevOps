@@ -48,8 +48,9 @@ pipeline {
         }
 
         stage('deploy frontend') {
-             when {
+            when {
                 expression { return params.INSTALL_SPRING }
+            }
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
@@ -57,5 +58,5 @@ pipeline {
                 '''
             }
         }
-}
+    }
 }
