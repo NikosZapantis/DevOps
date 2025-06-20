@@ -30,14 +30,36 @@
     - name: Verify npm version
       command: npm -v
 
-    - name: Copy frontend files
+    - name: Clone full repo to temp path
+      git: 
+        repo: "https://github.com/NikosZapantis/DevOps.git"
+        dest: "/tmp/frontend-repo"
+        version: main
+        force: no
+        accept_hostkey: yes
+
+    - name: Copy only frontend directory
       copy:
-        src: "/home/azureuser/backend/DS_crowdfunding/crowdfunding/src/main/resources/src (front-end)"
+        src: "/tmp/frontend-repo/App/frontend"
         dest: "{{ frontend_dir }}"
-        remote_src: true
         mode: '0755'
         owner: azureuser
         group: azureuser
+        remote_src: yes
+
+    - name: Remove temp repo
+      file:
+        path: "/tmp/frontend-repo"
+        state: absent
+
+    # - name: Copy frontend files
+    #   copy:
+    #     src: "/home/azureuser/backend/DS_crowdfunding/crowdfunding/src/main/resources/src (front-end)"
+    #     dest: "{{ frontend_dir }}"
+    #     remote_src: true
+    #     mode: '0755'
+    #     owner: azureuser
+    #     group: azureuser
     
     - name: Allow others to execute /home/azureuser so nginx can access frontend
       file:
@@ -48,7 +70,7 @@
     - name: Install npm dependencies
       command: npm install
       args:
-        chdir: "{{ frontend_dir }}"
+        chdir: "{{ frontend_dir }}/frontend"
 
     - name: Run serverInit.js with PM2
       shell: |
