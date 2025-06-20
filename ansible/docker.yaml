@@ -7,30 +7,30 @@
     docker_project_path: "/home/{{ ansible_user }}/docker"
 
   tasks:
-    - name: Install NGINX
-      apt:
-        name: nginx
-        state: present
-        update_cache: yes
+    # - name: Install NGINX
+    #   apt:
+    #     name: nginx
+    #     state: present
+    #     update_cache: yes
     
-    - name: Copy NGINX configuration file
-      copy:
-        src: "{{ playbook_dir }}/reverseproxy/nginx.node.j2"
-        dest: /etc/nginx/sites-available/spring
-      notify: restart nginx
+    # - name: Copy NGINX configuration file
+    #   copy:
+    #     src: "{{ playbook_dir }}/reverseproxy/nginx.node.j2"
+    #     dest: /etc/nginx/sites-available/spring
+    #   notify: restart nginx
 
-    - name: Enable reverse proxy conf
-      file:
-        src: /etc/nginx/sites-available/spring
-        dest: /etc/nginx/sites-enabled/spring
-        state: link
-      notify: restart nginx
+    # - name: Enable reverse proxy conf
+    #   file:
+    #     src: /etc/nginx/sites-available/spring
+    #     dest: /etc/nginx/sites-enabled/spring
+    #     state: link
+    #   notify: restart nginx
     
-    - name: Disable default NGINX site
-      file:
-        path: /etc/nginx/sites-enabled/default
-        state: absent
-      notify: restart nginx
+    # - name: Disable default NGINX site
+    #   file:
+    #     path: /etc/nginx/sites-enabled/default
+    #     state: absent
+    #   notify: restart nginx
       
     - name: Install required packages
       apt:
@@ -138,7 +138,7 @@
         chdir: "{{ docker_project_path }}/docker"
 
   handlers:
-    - name: restart nginx
-      service:
-        name: nginx
-        state: restarted
+    # - name: restart nginx
+    #   service:
+    #     name: nginx
+    #     state: restarted
