@@ -1,5 +1,6 @@
 pipeline {
 
+    agent any 
     /*agent {
         docker {
             image 'willhallonline/ansible:latest' 
