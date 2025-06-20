@@ -10,13 +10,11 @@ pipeline {
     stages {
     
 
-    stage('Install Ansible') {
+        stage('Install Ansible via pip') {
             steps {
                 sh '''
-                    sudo apt update
-                    sudo apt install -y software-properties-common
-                    sudo apt-add-repository --yes --update ppa:ansible/ansible
-                    sudo apt install -y ansible
+                    python3 -m pip install --user --upgrade pip
+                    python3 -m pip install --user ansible
                 '''
             }
         }
