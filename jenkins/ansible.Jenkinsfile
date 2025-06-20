@@ -8,29 +8,12 @@ pipeline {
         booleanParam(name: 'INSTALL_NODE', defaultValue: true, description: 'Install Node.js app')
     }
 
-    environment {
-        PATH = "${env.HOME}/.local/bin:${env.PATH}"
-    }
-
     stages {
 
-        stage('Install pip (if missing)') {
-            steps {
-                sh '''
-                    if ! command -v pip3 >/dev/null 2>&1; then
-                        echo "[INFO] pip not found. Attempting to install using ensurepip..."
-                        python3 -m ensurepip --user || true
-                    fi
-                '''
-            }
-        }
-
-        stage('Install Ansible via pip') {
-            steps {
-                sh '''
-                    python3 -m pip install --user --upgrade pip
-                    python3 -m pip install --user ansible
-                '''
+        agent {
+            docker {
+                image 'willhallonline/ansible:latest' 
+                args '-u root' 
             }
         }
 
