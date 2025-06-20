@@ -23,7 +23,6 @@
         ansible.builtin.debug:
           msg: "appdir {{ansible_user_dir}}"
 
-
       - name: Remove backend directory if exists
         file:
           path: /home/{{ ansible_user }}/backend

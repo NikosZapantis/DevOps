@@ -30,13 +30,19 @@
     - name: Verify npm version
       command: npm -v
 
-    - name: Copy frontend files
-      copy:
+    - name: Synchronize frontend folder
+      synchronize:
         src: "{{ playbook_dir }}/../App/frontend/"
         dest: "{{ frontend_dir }}/"
-        mode: '0755'
-        owner: azureuser
-        group: azureuser
+        recursive: yes
+
+    # - name: Copy frontend files
+    #   copy:
+    #     src: "{{ playbook_dir }}/../App/frontend/"
+    #     dest: "{{ frontend_dir }}/"
+    #     mode: '0755'
+    #     owner: azureuser
+    #     group: azureuser
     
     - name: Allow others to execute /home/azureuser so nginx can access frontend
       file:
