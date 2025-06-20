@@ -1,0 +1,61 @@
+pipeline {
+
+agent any
+
+//todo replace docker credentials
+
+environment { 
+        DOCKER_TOKEN=credentials('docker-push-secret')
+        DOCKER_USER='azureuser'
+        DOCKER_SERVER='ghcr.io'
+        DOCKER_PREFIX='ghcr.io/?????'
+    }
+
+stages {
+
+    stage('run ansible pipeline') {
+        steps {
+            build job: 'ansible-job'
+        }
+    }
+
+    stage('Test') {
+        steps {
+            sh '''
+                echo "Start testing"
+                ./mvnw test
+            '''
+        }
+    }
+
+    stage('Docker build and push') { 
+            steps {
+                sh '''
+                    HEAD_COMMIT=$(git rev-parse --short HEAD)
+                    TAG=$HEAD_COMMIT-$BUILD_ID
+                    docker build --rm -t $DOCKER_PREFIX:$TAG -t $DOCKER_PREFIX:latest -f nonroot-multistage.Dockerfile .
+                '''
+
+                sh '''
+                    echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
+                    docker push $DOCKER_PREFIX --all-tags
+                '''
+            }
+        }
+
+    stage('deploy to kubernetes') { //todo change file path 
+            steps {
+                sh '''
+                    HEAD_COMMIT=$(git rev-parse --short HEAD)
+                    TAG=$HEAD_COMMIT-$BUILD_ID
+                    export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
+                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini -e new_image=$DOCKER_PREFIX:$TAG ~/workspace/ansible-jo/playbooks/k8s-update-spring-deployment.yaml
+                '''
+                //? where workspace may put path /var/lib/jenkins/workspace/ansible-job
+            }
+        }
+
+
+}
+
+}
