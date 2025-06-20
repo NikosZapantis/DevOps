@@ -32,7 +32,7 @@
 
     - name: Copy frontend files
       copy:
-        src: "{{ playbook_dir }}/../App/frontend/"
+        src: "/home/azureuser/backend/DS_crowdfunding/crowdfunding/src/main/resources/src (front-end)"
         dest: "{{ frontend_dir }}/"
         mode: '0755'
         owner: azureuser
