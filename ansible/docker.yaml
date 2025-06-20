@@ -7,30 +7,12 @@
     docker_project_path: "/home/{{ ansible_user }}/docker"
 
   tasks:
-    # - name: Install NGINX
-    #   apt:
-    #     name: nginx
-    #     state: present
-    #     update_cache: yes
     
-    # - name: Copy NGINX configuration file
-    #   copy:
-    #     src: "{{ playbook_dir }}/reverseproxy/nginx.node.j2"
-    #     dest: /etc/nginx/sites-available/spring
-    #   notify: restart nginx
-
-    # - name: Enable reverse proxy conf
-    #   file:
-    #     src: /etc/nginx/sites-available/spring
-    #     dest: /etc/nginx/sites-enabled/spring
-    #     state: link
-    #   notify: restart nginx
-    
-    # - name: Disable default NGINX site
-    #   file:
-    #     path: /etc/nginx/sites-enabled/default
-    #     state: absent
-    #   notify: restart nginx
+    - name: Disable default NGINX site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: restart nginx
       
     - name: Install required packages
       apt:
@@ -130,6 +112,29 @@
     - name: Kill process using port 8080
       command: kill -9 {{ port_8080_pid.stdout }}
       when: port_8080_pid.stdout != ""
+      ignore_errors: yes
+
+    - name: Kill any process on port 7000
+      shell: |
+        pid=$(lsof -t -i :7000) && kill -9 "$pid" || true
+      ignore_errors: true
+
+    - name: Kill all pm2 processes and clear saved state
+      shell: |
+        pm2 delete all || true
+        pm2 kill || true
+        pm2 unstartup || true
+      ignore_errors: true
+
+    - name: Find process using port 80
+      shell: |
+        lsof -ti :80 || true
+      register: port_80_pid
+      changed_when: false
+      
+    - name: Kill process using port 80
+      command: kill -9 {{ port_80_pid.stdout }}
+      when: port_80_pid.stdout != ""
       ignore_errors: yes
 
     - name: Run docker compose 
