@@ -33,7 +33,8 @@
     - name: Copy frontend files
       copy:
         src: "/home/azureuser/backend/DS_crowdfunding/crowdfunding/src/main/resources/src (front-end)"
-        dest: "{{ frontend_dir }}/"
+        dest: "{{ frontend_dir }}"
+        remote_src: true
         mode: '0755'
         owner: azureuser
         group: azureuser
