@@ -31,7 +31,7 @@ pipeline {
         stage('test connection to deploy env') {
             steps {
                 sh '''
-                    ansible -i ~/workspace/ansible-job/inventory.ini 
+                    ansible -i ~/workspace/ansible-job/inventory.ini all -m ping
                 '''
             }
         }
