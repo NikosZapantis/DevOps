@@ -67,7 +67,7 @@ pipeline {
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=~/var/lib/jenkins/workspace/ansible-job/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini -l appserver-vm ~/workspace/ansible-job/node.yaml
+                    ansible-playbook -i ~/workspace/ansible-job/inventory.ini ~/workspace/ansible-job/node.yaml
                 '''
             }
         }
