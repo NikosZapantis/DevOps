@@ -5,6 +5,7 @@ pipeline {
     parameters {
         booleanParam(name: 'INSTALL_POSTGRES', defaultValue: true, description: 'Install PostgreSQL')
         booleanParam(name: 'INSTALL_SPRING', defaultValue: true, description: 'Install Spring Boot app')
+        booleanParam(name: 'INSTALL_NODE', defaultValue: true, description: 'Install Node.js app')
     }
 
     environment {
@@ -79,7 +80,7 @@ pipeline {
 
         stage('deploy frontend') {
             when {
-                expression { return params.INSTALL_SPRING }
+                expression { return params.INSTALL_NODE }
             }
             steps {
                 sh '''
