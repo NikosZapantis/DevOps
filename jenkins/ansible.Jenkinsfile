@@ -1,11 +1,11 @@
 pipeline {
 
-    agent {
+    /*agent {
         docker {
             image 'willhallonline/ansible:latest' 
             args '-u root' 
         }
-    }
+    }*/
 
     parameters {
         booleanParam(name: 'INSTALL_POSTGRES', defaultValue: true, description: 'Install PostgreSQL')
