@@ -25,6 +25,16 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         if(response.ok) {
             const data = await response.json();
 
+            await fetch('/send-email', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: username,
+                    subject: 'Welcome to CrowdFunding App',
+                    text: `Nice to see you again,\n\nExplore Crowdfunding App! Help people reach their dreams.\n\nBest regards,\nCrowdFunding App Team`,
+                }),
+            });
+
             // Saving the accessToken into sessionStorage
             if (data.accessToken) {
                 sessionStorage.setItem('token', data.accessToken);
@@ -78,6 +88,17 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
         if(response.ok) {
             showAlert('Registration successful! Please log in.', "success", 3000);
+
+            // mailhog email notification
+            await fetch('/send-email', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: email,
+                    subject: 'Welcome to CrowdFunding App',
+                    text: `Hello ${firstName},\n\nThank you for registering on our platform! We're excited to have you on board.\n\nBest regards,\nCrowdFunding App Team`,
+                }),
+            });
 
             // Flipping the card to the login
             document.querySelector('.card-flip').classList.toggle('flipped');
