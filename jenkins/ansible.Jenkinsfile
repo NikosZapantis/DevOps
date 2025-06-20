@@ -1,18 +1,16 @@
 pipeline {
 
-    agent any
-
-    parameters {
-        booleanParam(name: 'INSTALL_POSTGRES', defaultValue: true, description: 'Install PostgreSQL')
-        booleanParam(name: 'INSTALL_SPRING', defaultValue: true, description: 'Install Spring Boot app')
-        booleanParam(name: 'INSTALL_NODE', defaultValue: true, description: 'Install Node.js app')
-    }
-
     agent {
         docker {
             image 'willhallonline/ansible:latest' 
             args '-u root' 
         }
+    }
+
+    parameters {
+        booleanParam(name: 'INSTALL_POSTGRES', defaultValue: true, description: 'Install PostgreSQL')
+        booleanParam(name: 'INSTALL_SPRING', defaultValue: true, description: 'Install Spring Boot app')
+        booleanParam(name: 'INSTALL_NODE', defaultValue: true, description: 'Install Node.js app')
     }
 
     stages {
@@ -30,10 +28,10 @@ pipeline {
         }
 
         stage('test connection to deploy env') {
-        steps {
-            sh '''
-                ansible -i ~/workspace/ansible-job/inventory.ini 
-            '''
+            steps {
+                sh '''
+                    ansible -i ~/workspace/ansible-job/inventory.ini 
+                '''
             }
         }
         
