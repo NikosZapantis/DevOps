@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  js-deployment
+  namespace: default
+  labels:
+    app: js
+spec:
+  selector:
+    matchLabels:
+      app: js
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: js
+    spec:
+      containers:
+      - name:  js
+        image:  ghcr.io/nikoszapantis/devops-frontend:latest
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        ports:
+        - containerPort: 80
+          name:  js
+      imagePullSecrets:
+      - name: registry-credentials

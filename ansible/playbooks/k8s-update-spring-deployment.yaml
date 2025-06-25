@@ -1,7 +1,7 @@
 ---
   - name: Update Kubernetes Deployment Image
     hosts: localhost
-    gather_facts: no
+    gather_facts: false
     vars:
       namespace: default
       deployment_name: spring-deployment
@@ -23,7 +23,6 @@
                   containers:
                     - name: "{{ container_name }}"
                       image: "{{ new_image }}"
-
 
       - name: Wait for rollout to complete
         command: kubectl rollout status deployment/{{ deployment_name }} -n {{ namespace }} --timeout=360s
