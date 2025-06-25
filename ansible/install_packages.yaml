@@ -1,0 +1,39 @@
+---
+- name: Install latest Ansible on VM
+  hosts: all
+  become: yes
+  vars:
+    ansible_venv_path: /opt/ansible_venv
+    ansibleplaybook_path: /usr/local/bin/ansible-playbook
+  
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - python3
+          - python3-venv
+        state: present
+        update_cache: yes
+
+    - name: Create Ansible virtual environment
+      command: python3 -m venv {{ ansible_venv_path }}
+      args:
+        creates: "{{ ansible_venv_path }}"
+      
+    - name: Upgrade pip in venv 
+      command: "{{ ansible_venv_path }}/bin/pip install --upgrade pip"
+    
+    - name: Install Ansible in venv
+      command: "{{ ansible_venv_path }}/bin/pip install ansible"
+
+    - name: Create symlink to ansible in /usr/local/bin
+      file:
+        src: "{{ ansible_venv_path }}/bin/ansible"
+        dest: /usr/local/bin/ansible
+        state: link
+
+    - name: Create symlink to ansible-playbook in /usr/local/bin
+      file:
+        src: "{{ ansible_venv_path }}/bin/ansible-playbook"
+        dest: "{{ ansibleplaybook_path }}"
+        state: link
