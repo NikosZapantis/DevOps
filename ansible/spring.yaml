@@ -7,8 +7,8 @@
       app:
         env:
           SPRING_DATASOURCE_USERNAME: devopsuser
-          SPRING_DATASOURCE_PASSWORD: RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
-          SPRING_DATASOURCE_URL: "jdbc:postgresql://dpg-d0oa61juibrs73a8nne0-a.oregon-postgres.render.com:5432/devopsdb_n794"
+          SPRING_DATASOURCE_PASSWORD: N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
+          SPRING_DATASOURCE_URL: "jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym"
           
   pre_tasks:
     - name: Install Java
@@ -43,8 +43,8 @@
             spring.application.name=gotham_2wzk
 
             spring.datasource.username=devopsuser
-            spring.datasource.password=RGomWH4BLdSb6rwGPrsiuPwaNJkEFELZ
-            spring.datasource.url=jdbc:postgresql://dpg-d0oa61juibrs73a8nne0-a.oregon-postgres.render.com:5432/devopsdb_n794
+            spring.datasource.password=N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
+            spring.datasource.url=jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym
 
             spring.datasource.driver-class-name=org.postgresql.Driver
             spring.jpa.generate-ddl=true
