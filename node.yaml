@@ -70,7 +70,7 @@
     - name: Install npm dependencies
       command: npm install
       args:
-        chdir: "{{ frontend_dir }}/frontend"
+        chdir: "{{ frontend_dir }}"
 
     - name: Run serverInit.js with PM2
       shell: |
