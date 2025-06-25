@@ -40,7 +40,7 @@
 
     - name: Copy only frontend directory
       copy:
-        src: "/tmp/frontend-repo/App/frontend"
+        src: "/tmp/frontend-repo/App/frontend/"
         dest: "{{ frontend_dir }}"
         mode: '0755'
         owner: azureuser
