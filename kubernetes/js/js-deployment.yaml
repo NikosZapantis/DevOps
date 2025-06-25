@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name:  js
-        image:  ghcr.io/tsadimas/ds-js:latest
+        image:  ghcr.io/nikoszapantis/devops-frontend:latest
         resources:
           requests:
             cpu: 200m

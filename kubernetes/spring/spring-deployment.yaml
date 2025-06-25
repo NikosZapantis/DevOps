@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: spring
-          image: ghcr.io/tsadimas/ds-lab-2024:0f3ade0-1 #TODO: Update with our image
+          image: ghcr.io/nikoszapantis/devops-backend:latest
           livenessProbe:
             httpGet:
               path: "/actuator/health/liveness"
@@ -41,11 +41,11 @@ spec:
               memory: 512Mi
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/dsdb #TODO: change to our db link
+              value: jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym
             - name: SPRING_DATASOURCE_USERNAME
-              value: dbuser #TODO: Change to the real username
+              value: devopsuser
             - name: SPRING_DATASOURCE_PASSWORD
-              value: pass #TODO: our db password
+              value: N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
           ports:
           - containerPort: 8080
             name: spring
