@@ -2,11 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: spring-deployment
+  namespace: default
+  labels:
+    app: spring
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: spring
+  replicas: 1
   template:
     metadata:
       labels:
@@ -14,16 +17,37 @@ spec:
     spec:
       containers:
         - name: spring
-          image: ghcr.io/your-username/your-spring-app:latest #TODO: Update with our image
-          ports:
-            - containerPort: 8080
+          image: ghcr.io/tsadimas/ds-lab-2024:0f3ade0-1 #TODO: Update with our image
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 8080
+            failureThreshold: 20
+            periodSeconds: 10
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: "/actuator/health/readiness"
+              port: 8080
+            failureThreshold: 10
+            periodSeconds: 10
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
           env:
             - name: SPRING_DATASOURCE_URL
-              value: #TODO: Change to the jdbc:postgresql://...
+              value: jdbc:postgresql://postgres:5432/dsdb #TODO: change to our db link
             - name: SPRING_DATASOURCE_USERNAME
-              value: appuser #TODO: Change to the real username
+              value: dbuser #TODO: Change to the real username
             - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: password
+              value: pass #TODO: our db password
+          ports:
+          - containerPort: 8080
+            name: spring
+      imagePullSecrets:
+      - name: registry-credentials

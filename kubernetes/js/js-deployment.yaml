@@ -1,19 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: javascript
+  name:  js-deployment
+  namespace: default
+  labels:
+    app: js
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: javascript
+      app: js
+  replicas: 1
   template:
     metadata:
       labels:
-        app: javascript
+        app: js
     spec:
       containers:
-        - name: javascript
-          image: ghcr.io/your-username/your-javascript-app:latest #TODO: Update with our image
-          ports:
-            - containerPort: 80
+      - name:  js
+        image:  ghcr.io/tsadimas/ds-js:latest
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        ports:
+        - containerPort: 80
+          name:  js
+      imagePullSecrets:
+      - name: registry-credentials

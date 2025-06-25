@@ -1,16 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: javascript-ingress
+  name: js-ingress
 spec:
   rules:
-    - host: javascript.example.com #TODO: Change to the real domain
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: javascript
-                port:
-                  number: 80
+  - http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: js-svc
+            port:
+              name: js

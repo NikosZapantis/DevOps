@@ -1,16 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: spring-ingress-tls
+  name: spring-ingress-ssl
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   tls:
     - hosts:
-        - spring.example.com #TODO: Change to the real domain
-      secretName: spring-tls
+        - spring.local #TODO: Maybe modify
+      secretName: spring-tls-secret
   rules:
-    - host: spring.example.com #TODO: Change to the real domain
+    - host: demo.local #TODO: Change to the real domain
       http:
         paths:
           - path: /
@@ -19,4 +19,4 @@ spec:
               service:
                 name: spring
                 port:
-                  number: 80
+                  name: spring
