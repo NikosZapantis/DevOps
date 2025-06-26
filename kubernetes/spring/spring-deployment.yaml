@@ -49,5 +49,4 @@ spec:
           ports:
           - containerPort: 8080
             name: spring
-      imagePullSecrets:
-      - name: registry-credentials
+            
