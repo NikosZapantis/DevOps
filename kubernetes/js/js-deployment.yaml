@@ -28,5 +28,4 @@ spec:
         ports:
         - containerPort: 80
           name:  js
-      imagePullSecrets:
-      - name: registry-credentials
+          
