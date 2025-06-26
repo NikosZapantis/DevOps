@@ -6,9 +6,9 @@ metadata:
   name: js-svc
 spec:
   ports:
-    - port: 7000
+    - port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 7000
       name: js
   selector:
     app: js
