@@ -6,8 +6,8 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: "spring.devopscf.ddns-ip.net"
-  http:
+  #- host: "spring.devopscf.ddns-ip.net"
+  - http:
       paths:
       - path: /
         pathType: ImplementationSpecific #TODO: maybe modify
@@ -15,4 +15,4 @@ spec:
           service:
             name: spring
             port:
-              name: spring
+              number: 8080
