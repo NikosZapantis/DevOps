@@ -90,7 +90,7 @@ Automates deployment of the Node.js frontend:
     - Enables access control permissions for static files
 
 - Usage:
-    `ansible-playbook -i inventory.ini node.yaml`
+    `ansible-playbook -i inventory.ini ./playbooks/node.yaml`
 
 **spring.yaml**
 Automates deployment of the Spring Boot backend:
@@ -103,7 +103,7 @@ Automates deployment of the Spring Boot backend:
     - Supports Maven SHA512 rescue in case of verification failure.
 
 - Usage:
-    `ansible-playbook -i inventory.ini spring.yaml`
+    `ansible-playbook -i inventory.ini ./playbooks/spring.yaml`
 
 **docker.yaml**
 Alternative method for deploying both frontend and backend using Docker Compose (includes nginx container & mailhog):
@@ -114,7 +114,7 @@ Alternative method for deploying both frontend and backend using Docker Compose 
     - Runs docker compose up -d.
 
 - Usage:
-    `ansible-playbook -i inventory.ini docker.yaml`
+    `ansible-playbook -i inventory.ini ./playbooks/docker.yaml`
 
 
 **install_packages.yaml** [Automation_Jenkins]
@@ -126,7 +126,7 @@ Bootstraps a fresh VM with the latest version of Ansible using Python virtual en
     - Symlinks ansible and ansible-playbook to /usr/local/bin.
 
 - Usage:
-    `ansible-playbook -i inventory.ini install_packages.yaml`
+    `ansible-playbook -i inventory.ini ./playbooks/install_packages.yaml`
 
 **custom_commands_jenkins.yaml** [Automation_Jenkins]
 Prepares a Jenkins instance to interact with remote VMs via SSH:
@@ -136,7 +136,7 @@ Prepares a Jenkins instance to interact with remote VMs via SSH:
     - Ensures secure permissions are applied.
 
 - Usage:
-    `ansible-playbook -i inventory.ini custom_commands_jenkins.yaml`
+    `ansible-playbook -i inventory.ini ./playbooks/custom_commands_jenkins.yaml`
 
 ---
 
@@ -163,19 +163,19 @@ Systemd unit file to run the Spring Boot backend as a Linux service.
 ## Usage
 Run those (ansible only manual deployment):
 ```
-ansible-playbook -i inventory.ini spring.yaml
-ansible-playbook -i inventory.ini node.yaml
+ansible-playbook -i inventory.ini ./playbooks/spring.yaml
+ansible-playbook -i inventory.ini ./playbooks/node.yaml
 ```
 
 Run those (ansible docker deployment):
 ```
-ansible-playbook -i inventory.ini docker.yaml
+ansible-playbook -i inventory.ini ./playbooks/docker.yaml
 ```
 
 Run those (on jenkins deployment for ansible download and ssh setup on VM):
 ```
-ansible-playbook -i inventory.ini install_packages.yaml
-ansible-playbook -i inventory.ini custom_commands_jenkins.yaml
+ansible-playbook -i inventory.ini ./playbooks/install_packages.yaml
+ansible-playbook -i inventory.ini ./playbooks/custom_commands_jenkins.yaml
 ```
 
 ---
