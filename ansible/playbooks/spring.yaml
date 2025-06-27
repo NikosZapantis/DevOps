@@ -1,14 +1,5 @@
---- #?file will be moved to playbook directory when optimising
+---
 - hosts: all
-
-  vars: #? will be moved to group_vars/azure-hosts.yaml when optimising
-      appdir: "/home/{{ ansible_user }}/backend/DS_crowdfunding"
-      branch: "main"
-      app:
-        env:
-          SPRING_DATASOURCE_USERNAME: devopsuser
-          SPRING_DATASOURCE_PASSWORD: N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
-          SPRING_DATASOURCE_URL: "jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym"
           
   pre_tasks:
     - name: Install Java
@@ -19,13 +10,13 @@
       become: true
 
   tasks:
-      - name: "debug appdir" #? may be removed later - no use?
+      - name: "debug appdir"
         ansible.builtin.debug:
           msg: "appdir {{ansible_user_dir}}"
 
       - name: Remove backend directory if exists
         file:
-          path: /home/{{ ansible_user }}/backend
+          path: "{{ backend_dir }}"
           state: absent
         become: true
 
@@ -35,29 +26,35 @@
             dest: "{{ appdir }}"
             version: "{{ branch }}"
             force: yes
-
-      - name: "Populate application.properties" #? will need to be optimised at some point
-        copy:
+      
+      - name: Populate application.properties
+        template:
+          src: ./../templates/application.properties.j2
           dest: "{{ appdir }}/crowdfunding/src/main/resources/application.properties"
-          content: |
-            spring.application.name=gotham_2wzk
+        become: true
 
-            spring.datasource.username=devopsuser
-            spring.datasource.password=N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
-            spring.datasource.url=jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym
-
-            spring.datasource.driver-class-name=org.postgresql.Driver
-            spring.jpa.generate-ddl=true
-            spring.jpa.hibernate.ddl-auto=update
-
-            spring.jpa.show-sql=true
-            spring.jpa.properties.hibernate.format_sql=true
-
-            spring.security.user.name=user
-            spring.security.user.password=user
-
-            app.jwtSecret='ZdHhly8tFaRdsn4pYJSGTSWU678of9GEQhWrTNnzgAXb3vVqdHHUs5QJoWyi87'
-            app.jwtExpirationMs=86400000
+      # - name: "Populate application.properties"
+      #   copy:
+      #     dest: "{{ appdir }}/crowdfunding/src/main/resources/application.properties"
+      #     content: |
+      #       spring.application.name=gotham_2wzk
+      #
+      #       spring.datasource.username=devopsuser
+      #       spring.datasource.password=N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
+      #       spring.datasource.url=jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym
+      #
+      #       spring.datasource.driver-class-name=org.postgresql.Driver
+      #       spring.jpa.generate-ddl=true
+      #       spring.jpa.hibernate.ddl-auto=update
+      #
+      #       spring.jpa.show-sql=true
+      #       spring.jpa.properties.hibernate.format_sql=true
+      #
+      #       spring.security.user.name=user
+      #       spring.security.user.password=user
+      #
+      #       app.jwtSecret='ZdHhly8tFaRdsn4pYJSGTSWU678of9GEQhWrTNnzgAXb3vVqdHHUs5QJoWyi87'
+      #       app.jwtExpirationMs=86400000    
 
       - name: Set execute permission for mvnw
         file:
@@ -108,7 +105,7 @@
       - name: copy spring service file
         template:
           src: ./../files/spring.service.j2
-          dest: "/etc/systemd/system/spring.service"
+          dest: "{{ spring_service_file }}"
         become: true
         become_user: root
         notify: restart spring

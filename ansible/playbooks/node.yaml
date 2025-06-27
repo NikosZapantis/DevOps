@@ -62,20 +62,20 @@
     - name: Copy NGINX config for Node.js app
       template:
         src: ./../reverseproxy/nginx.node.j2
-        dest: /etc/nginx/sites-available/spring
+        dest: "{{ nginx_sites_available_path }}/{{ nginx_node_conf_filename }}"
       become: true
 
     - name: Enable Node.js site in NGINX
       file:
-        src: /etc/nginx/sites-available/spring
-        dest: /etc/nginx/sites-enabled/spring
+        src: "{{ nginx_sites_available_path }}/{{ nginx_node_conf_filename }}"
+        dest: "{{ nginx_sites_enabled_path }}/{{ nginx_node_conf_filename }}"
         state: link
       become: true
       notify: restart nginx
 
     - name: Disable default NGINX site
       file:
-        path: /etc/nginx/sites-enabled/default
+        path: "{{ nginx_sites_enabled_path }}/default"
         state: absent
       notify: restart nginx
 
