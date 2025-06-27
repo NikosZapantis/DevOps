@@ -2,7 +2,7 @@ pipeline {
 
 agent any
 
-//todo replace docker credentials
+//? Replace docker credentials
 
 environment { 
         DOCKER_TOKEN=credentials('docker-push-secret')
@@ -43,7 +43,7 @@ stages {
             }
         }
 
-    stage('deploy to kubernetes') { //todo change file path 
+    stage('deploy to kubernetes') {
             steps {
                 sh '''
                     HEAD_COMMIT=$(git rev-parse --short HEAD)
@@ -51,7 +51,6 @@ stages {
                     export ANSIBLE_CONFIG=~/workspace/ansible-job/ansible.cfg
                     ansible-playbook -i ~/workspace/ansible-job/inventory.ini -e new_image=$DOCKER_PREFIX:$TAG ~/workspace/ansible-jo/playbooks/k8s-update-spring-deployment.yaml
                 '''
-                //? where workspace may put path /var/lib/jenkins/workspace/ansible-job
             }
         }
 
