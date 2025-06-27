@@ -1,8 +1,18 @@
 server {
     listen 80;
+    server_name devops-cf.ip-ddns.com;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name devops-cf.ip-ddns.com;
+
+    ssl_certificate /etc/letsencrypt/live/devops-cf.ip-ddns.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/devops-cf.ip-ddns.com/privkey.pem;
+
     client_max_body_size 4G;
-    
-    server_name _;
 
     location / {
         root /home/azureuser/frontend;
@@ -18,5 +28,4 @@ server {
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
     }
-
 }
