@@ -78,10 +78,9 @@
             args:
                 chdir: "{{ appdir }}/crowdfunding"
 
-
       - name: copy spring service file
         template:
-          src: ./../files/spring.service.j2
+          src: ./../reverseproxy/spring.service.j2
           dest: "{{ spring_service_file }}"
         become: true
         become_user: root

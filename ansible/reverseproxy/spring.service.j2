@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User={{ ansible_user }}
-Group=general
+Group={{ ansible_user }}
 WorkingDirectory={{ working_directory }}
 ExecStart={{ exec_start }}
 SuccessExitStatus=143
