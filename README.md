@@ -1,46 +1,98 @@
-# Ομάδα 1 *[Crowdfunding Application]*
-- Μέλη:
-    - Αποστολάκης Δημήτριος aka it2022004
-    - Αποστόλου Ορέστης aka it2022006
-    - Ζαπάντης Νικόλαος aka it2022019
+## DevOps Crowdfunding Project
 
-# Github repo [Link]
-- Μπορείτε να δείτε τον κώδικα του project μας στο παρακάτω link:
-    # https://github.com/NikosZapantis/DS_crowdfunding
-        - Για να δείτε τον κώδικα του backend (Controllers / Entities etc.) ακολουθήστε το παρακάτω path:
-            `https://github.com/NikosZapantis/DS_crowdfunding`
+---
 
-**Το συγκεκριμένο repository DS_crowdfunding ήταν private έως και τις 15/01/2025 και έγινε public καθαρά και μόνο για να έχετε πρόσβαση.**
+## Authors
 
-# ***COMMANDS [Backend]***
-    - Εντολές εκτέλεσης παραδοτέου
-        - mvn clean package
-        - java -jar .\target\crowdfunding-0.0.1-SNAPSHOT.jar [start]
-        - Ctrl + C [Stop]
+- [🔗 Zapantis Nikolaos](https://github.com/NikosZapantis)
+- [🔗 Lymperi Alexandra](https://github.com/alexandralymperi)
 
-# ***COMMANDS [Frontend]***
-    - Εντολές εκτέλεσης
-        - npm init -y
-        - npm install [or npm install express cors (specified)]
-        - node serverInit.js
+---
 
-# Βασικές παραδοχές εργασίας
-1. Κάθε έργο (fundraiser) έχει ακριβώς έναν δημιουργό.
+## 🗃️ Table of Contents
 
-2. Κάθε έργο έχει προκαθορισμένο κύκλο ζωής με βάση τα παρακάτω:
-    - Pending **-->** Αναμένει έγκριση από τον Admin.
-    - Active **-->** Έχει εγκριθεί από τον Admin και βρίσκεται στην διάθεση του κοινού.
-    - Stopped **-->** Έχει μπει σε παύση από τον Admin και μπορεί να ενεργοποιηθεί ξανά μόνο από αυτόν.
-    - Completed **-->** Έχει ολοκληρωθεί (ολοκληρώθηκε το deadline).
+- [Overview](#overview)
+- [Project Structure](#project-structure)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies Used](#technologies-used)
 
-3. Ένα έργο παραμένει active μέχρις ότου να ολοκληρωθεί το deadline. Αυτό σημαίνει πως μπορεί να επιτεύξει τον στόχο που έχει τεθεί ή και να τον ξεπεράσει.
+---
 
-4. Ο λογαριασμός που ανατείθεται στον Admin της εφαρμογής δημιουργείται στο initialization μία και μόνο φορά και δεν μπορεί ούτε να αλλάξει ούτε να δημιουργηθεί και άλλος (hardcoded).
+## Overview
 
-5. Κάθε χρήστης μπορεί να κάνει submit ένα και μόνο report σε κάθε ξεχωριστό έργο και αν επιθυμεί να καταχωρήσει καινούργιο report το ακριβώς προηγούμενο αντικαθίσταται και αποθηκεύονται τα καινούργια στοιχεία, για το οποίο ενημερώνεται πριν επιχειρήσει να το καταχωρήσει.
+This repository contains a complete DevOps pipeline for deploying and managing a **Crowdfunding Web Application** with:
 
-6. Η δωρεά έχει κατώτατο όριο 1 ευρώ και το κάθε έργο έχει κατώτατο όριο στόχου 100 ευρώ.
+- **♨️ Java Spring Boot backend**
+- **｡🇯‌🇸 JavaScript / Node.js frontend**
 
-7. Το κάθε έργο έχει κατώτατο deadline για ένα μήνα μετά την δημιουργία του.
+The system is deployed on an **Azure Virtual Machine** using:
 
-8. Όταν πραγματοποιείται μια δωρεά από τον χρήστη, του εμφανίζεται κατάλληλο notification ότι πραγματοποιήθηκε με επιτυχία η συναλλαγή χωρίς να υπάρχει implementation με κάποιο API τράπεζας όπως θα γινόταν σε μια πληρέστερη έκδοση της εφαρμογής μας.
+- [🅰️ Ansible](https://www.ansible.com/) for server provisioning & automation.
+- [🐋 Docker](https://www.docker.com/) for containerization.  
+- [🧩 Jenkins](https://www.jenkins.io/) for CI/CD pipelines.  
+- [☸️ Kubernetes](https://kubernetes.io/) for kubernetes deployment.  
+
+---
+
+## Project Structure
+
+```bash
+├── App/
+├── ansible/
+├── docker/
+├── jenkins/
+├── kubernetes/
+├── README.md 
+```
+
+---
+
+## Architecture
+
+- Ansible automates the provisioning of the server, package installations, and deployment process.
+- Docker containers are used to package both the backend and frontend services (+ external, such as mailhog).
+- Jenkins manages the CI/CD pipeline with both `Jenkinsfile` and `ansible.Jenkinsfile`.
+- Kubernetes organize the application in containers across the Azure VM.
+- Azure VM serves as the host environment for all deployments.
+
+---
+
+## Installation
+
+1. Create an Azure Virtual Machine with a Linux image (latest ideally).
+2. Clone this repository on your local machine.
+3. Configure:
+    - ansible/inventory.ini
+    - group_vars/all.yaml, group_vars/azure-hosts.yaml
+    - host_vars/devops-vm-1.yaml
+
+4. Run the Ansible playbook to deploy the Spring Boot + Node.js application:
+
+```
+ansible-playbook -i ansible/inventory.ini ansible/spring.yaml
+ansible-playbook -i ansible/inventory.ini ansible/node.yaml
+```
+
+---
+
+## Usage
+
+Once deployed:
+- 🌐 The Spring Boot REST API runs on the Azure VM's public IP.
+- 🖥️ The frontend communicates with the backend via HTTP/HTTPS.
+- 🔁 A reverse proxy (NGINX) is set up for routing traffic.
+
+---
+
+## Technologies Used
+
+- 🅰️ Ansible
+- 🐋 Docker
+- 🧩 Jenkins
+- ☸️ Kubernetes
+- 🖥️ Azure
+- ♨️ Java 21, 🌱 Spring Boot (backend)
+- **</>** HTML, 🎨 CSS, **｡🇯‌🇸**‌ JavaScript (frontend)
+

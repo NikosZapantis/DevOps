@@ -17,9 +17,7 @@ This directory contains the CI/CD configuration for automating deployment, testi
 - [Pipeline Flow](#pipeline-flow)
 - [Troubleshooting](#troubleshooting)
 
-
 ---
-
 
 ## Overview
 
@@ -32,9 +30,7 @@ The jenkins CI/CD setup includes:
 - Ansible playbooks triggered via Jenkins pipelines.
 - Branch-based automation: the pipeline pulls from `ansible_only` or `jenkins` branches.
 
-
 ---
-
 
 ## Requirements
 
@@ -48,7 +44,6 @@ The jenkins CI/CD setup includes:
 - GitHub credentials configured in Jenkins (for cloning & pushing).
 - Docker installed in Jenkins host (if using containerization).
 - `.ssh/<SSH_PRIVATE_KEY>` deployed to Jenkins and target VMs.
-
 
 ---
 
@@ -68,7 +63,6 @@ A new VM was created for Jenkins. The following was performed:
 
 3. Cloned repo branch `ansible_only` inside Jenkins workspace.
 
-
 ---
 
 ## Ports and Services
@@ -80,7 +74,6 @@ A new VM was created for Jenkins. The following was performed:
 | `7000`       | Node.js frontend            |
 | `80`         | NGINX reverse proxy         |
 | `1025 / 8025`| (Mailhog - optional)        |
-
 
 ---
 
@@ -111,7 +104,6 @@ This pipeline builds Docker images, pushes them to GitHub Container Registry and
     - `playbooks/k8s-update-spring-deployment.yaml`
     - with `-e new_image=$TAG` Ansible variable.
 
-
 ---
 
 ## Usage
@@ -120,26 +112,26 @@ This pipeline builds Docker images, pushes them to GitHub Container Registry and
 3. Optionally pass parameters to enable/disable backend/frontend deployment.
 4. Monitor logs in each pipeline stage.
 
-
 ---
 
 ## Pipeline Flow
-- graph:
 
-```
-A[Code pushed to ansible_only branch] --> B[Ansible Pipeline (ansible.Jenkinsfile)]
+```mermaid
+graph TD
+    A[Code pushed to `ansible_only` branch] --> B[Ansible Pipeline (`ansible.Jenkinsfile`)]
     B --> C[Test Ansible availability]
     C --> D[Run ansible-job]
     D --> E[Test SSH ping to VM]
     E --> F{Deploy Backend?}
-    F -- Yes --> G[Run spring.yaml via Ansible]
+    F -- Yes --> G[Run `spring.yaml` via Ansible]
     F -- No --> H[Skip Spring]
     G --> I{Deploy Frontend?}
-    I -- Yes --> J[Run node.yaml via Ansible]
+    I -- Yes --> J[Run `node.yaml` via Ansible]
     I -- No --> K[Skip Node]
-    J --> L[Deployment complete]
+    J --> L[✅ Deployment Complete]
+    K --> L
+    H --> I
 ```
-
 
 ---
 

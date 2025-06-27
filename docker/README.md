@@ -18,7 +18,6 @@ All containers are organized via **Docker Compose** and can be deployed either m
 - [Environment Variables](#environment-variables)
 - [Troubleshooting](#troubleshooting)
 
-
 ---
 
 ## Overview
@@ -34,20 +33,21 @@ This setup launches 4 Docker containers:
 
 The `nginx` container uses a config file mounted from the `ansible/reverseproxy/nginx.conf`.
 
-
 ---
 
 ## File Structure
+
+```bash
 docker/
 ├── .env [hosting_ports]
 ├── README.md 
 ├── docker-compose.yaml 
+```
 
 **Related files**:
 - **Backend Dockerfile**: `../App/backend/Dockerfile`
 - **Frontend Dockerfile**: `../App/frontend/Dockerfile`
 - **NGINX config**: `../ansible/reverseproxy/nginx.conf`
-
 
 ---
 
@@ -111,7 +111,6 @@ docker compose up -d
 docker compose down
 ```
 
-
 ---
 
 ## Container Management
@@ -145,7 +144,6 @@ docker images
 docker system prune -af
 ```
 
-
 ---
 
 ## Environment Variables
@@ -160,7 +158,6 @@ NGINX_PORT=<Your_Nginx_Port> (default is 80)
 Ensure that .env is present next to `docker-compose.yaml` in the remote path:
 `/home/azureuser/docker/docker/.env`
 
-
 ---
 
 ## Troubleshooting
@@ -168,4 +165,3 @@ Ensure that .env is present next to `docker-compose.yaml` in the remote path:
 - **Changes not applied**: Use `docker compose down && docker compose up --build -d` to force rebuild.
 - **Mailhog not responding**: Currently, Mailhog is included for future use. Make sure it's not blocked by a firewall, and check port 8025.
 - **Missing .env**: Containers won't start without the .env file.
-

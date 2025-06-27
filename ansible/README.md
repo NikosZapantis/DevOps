@@ -21,7 +21,6 @@ This directory contains a collection of Ansible playbooks and configurations des
 - [Usage](#usage)
 - [Troubleshooting](#troubleshooting)
 
-
 ---
 
 ## Overview
@@ -34,11 +33,11 @@ This ansible automation system supports:
 - Jenkins integration with SSH key configuration.
 - Local Ansible installation via Python env.
 
-
 ---
 
 ## Directory Structure
 
+```bash
 ansible/
 ├── ansible.cfg
 ├── inventory.ini
@@ -55,7 +54,7 @@ ansible/
 ├── docker.yaml 
 ├── install_packages.yaml 
 ├── custom_commands_jenkins.yaml 
-
+```
 
 ---
 
@@ -65,7 +64,6 @@ ansible/
 - **Python >= 3.6**
 - Ubuntu VMs (on Azure) or local linux VMs.
 - SSH access and proper inventory configuration.
-
 
 ---
 
@@ -140,7 +138,6 @@ Prepares a Jenkins instance to interact with remote VMs via SSH:
 - Usage:
     `ansible-playbook -i inventory.ini custom_commands_jenkins.yaml`
 
-
 ---
 
 ## Templates
@@ -151,7 +148,6 @@ Reverse proxy configuration for frontend serving via NGINX.
 **files/spring.service.j2**
 Systemd unit file to run the Spring Boot backend as a Linux service.
 
-
 ---
 
 ## Group and Host Variables
@@ -161,7 +157,6 @@ Systemd unit file to run the Spring Boot backend as a Linux service.
 **group_vars/azure-hosts.yaml**: Specific to Azure VMs (can hold DB credentials, etc.).
 
 **host_vars/devops-vm-1.yaml**: Host-specific configuration overrides.
-
 
 ---
 
