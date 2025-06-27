@@ -7,6 +7,10 @@ app_port: 8080
 frontend_dir: /home/{{ ansible_user }}/frontend
 backend_dir: /home/{{ ansible_user }}/backend
 
+#? docker path variables
+docker_user: "{{ ansible_user }}"
+docker_project_path: "/home/{{ ansible_user }}/docker"
+
 #? nginx path variables
 nginx_sites_available_path: /etc/nginx/sites-available
 nginx_sites_enabled_path: /etc/nginx/sites-enabled
@@ -27,4 +31,6 @@ spring_security:
 app_jwtSecret: "ZdHhly8tFaRdsn4pYJSGTSWU678of9GEQhWrTNnzgAXb3vVqdHHUs5QJoWyi87"
 app_jwtExpirationMs: 86400000
 
-
+#? spring service variables
+working_directory: /home/azureuser/backend/DS_crowdfunding/crowdfunding
+exec_start: "java -jar /home/azureuser/backend/DS_crowdfunding/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar"

@@ -3,10 +3,10 @@ Description=spring boot daemon
 After=network.target
 
 [Service]
-User=azureuser
-Group=azureuser
-WorkingDirectory=/home/azureuser/backend/DS_crowdfunding/crowdfunding
-ExecStart=java -jar /home/azureuser/backend/DS_crowdfunding/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar
+User={{ ansible_user }}
+Group=general
+WorkingDirectory={{ working_directory }}
+ExecStart={{ exec_start }}
 SuccessExitStatus=143
 Restart=on-failure
 RestartSec=10
