@@ -33,29 +33,6 @@
           dest: "{{ appdir }}/crowdfunding/src/main/resources/application.properties"
         become: true
 
-      # - name: "Populate application.properties"
-      #   copy:
-      #     dest: "{{ appdir }}/crowdfunding/src/main/resources/application.properties"
-      #     content: |
-      #       spring.application.name=gotham_2wzk
-      #
-      #       spring.datasource.username=devopsuser
-      #       spring.datasource.password=N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
-      #       spring.datasource.url=jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym
-      #
-      #       spring.datasource.driver-class-name=org.postgresql.Driver
-      #       spring.jpa.generate-ddl=true
-      #       spring.jpa.hibernate.ddl-auto=update
-      #
-      #       spring.jpa.show-sql=true
-      #       spring.jpa.properties.hibernate.format_sql=true
-      #
-      #       spring.security.user.name=user
-      #       spring.security.user.password=user
-      #
-      #       app.jwtSecret='ZdHhly8tFaRdsn4pYJSGTSWU678of9GEQhWrTNnzgAXb3vVqdHHUs5QJoWyi87'
-      #       app.jwtExpirationMs=86400000    
-
       - name: Set execute permission for mvnw
         file:
           path: "{{ appdir }}/crowdfunding/mvnw"
