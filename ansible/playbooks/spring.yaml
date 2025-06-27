@@ -16,7 +16,7 @@
           name: openjdk-21-jdk
           state: present
           update_cache: yes
-      become: yes
+      become: true
 
   tasks:
       - name: "debug appdir" #? may be removed later - no use?
@@ -73,11 +73,6 @@
           args:
               chdir: "{{ appdir }}/crowdfunding"
 
-  #      - name: "Run the Spring application"
-  #        command: "java -jar target/springbootdemo-0.0.1-SNAPSHOT.jar"
-  #        args:
-  #            chdir: "{{ appdir }}"
-
         rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
@@ -112,9 +107,9 @@
 
       - name: copy spring service file
         template:
-          src: ./files/spring.service.j2
+          src: ./../files/spring.service.j2
           dest: "/etc/systemd/system/spring.service"
-        become: yes
+        become: true
         become_user: root
         notify: restart spring
 
@@ -122,51 +117,24 @@
         service:
           name: spring
           state: restarted
-        become: yes
+        become: true
 
       - name: ensure spring service started
         service:
           name: spring
           state: started
           enabled: yes
-        become: yes
-
-      # - name: "APT - install nginx"
-      #   apt:
-      #     name: nginx
-      #     update_cache: yes
-      #   become: yes
-
-      # - name: copy nginx conf file
-      #   template:
-      #     src: ./reverseproxy/nginx.http.j2
-      #     dest: "/etc/nginx/sites-available/spring"
-      #   become: yes
-
-      # - name: enable spring site in nginx
-      #   file:
-      #     src: "/etc/nginx/sites-available/spring"
-      #     dest: "/etc/nginx/sites-enabled/spring"
-      #     state: link
-      #   become: yes
-      #   notify: restart nginx
-
-      # - name: de-activate default nginx site
-      #   file:
-      #     path: /etc/nginx/sites-enabled/default
-      #     state: absent
-      #   become: yes
-      #   notify: restart nginx
+        become: true
 
   handlers:
   - name: restart spring
     service:
       name: spring
       state: restarted
-    become: yes
+    become: true
 
   - name: restart nginx
     service:
       name: nginx
       state: restarted
-    become: yes
+    become: true

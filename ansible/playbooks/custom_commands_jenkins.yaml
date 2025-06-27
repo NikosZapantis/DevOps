@@ -1,7 +1,7 @@
 --- 
 - name: Upload SSH key and setup known_hosts
   hosts: all
-  become: yes
+  become: true
   
   vars:
     ssh_dir: /var/lib/jenkins/.ssh

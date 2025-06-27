@@ -4,6 +4,7 @@ appuser: azureuser
 appgroup: azureuser
 app_port: 8080
 backend_server_url: "http://135.116.56.86:8080"
+frontend_dir: /home/{{ ansible_user }}/frontend
 
 app:
   #VITE_BACKEND: "http://135.116.56.86:8080"

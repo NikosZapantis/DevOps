@@ -1,7 +1,7 @@
 ---
 - name: Install latest Ansible on VM
   hosts: all
-  become: yes
+  become: true
   vars:
     ansible_venv_path: /opt/ansible_venv
     ansibleplaybook_path: /usr/local/bin/ansible-playbook
