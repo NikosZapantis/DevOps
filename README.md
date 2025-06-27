@@ -2,7 +2,7 @@
 
 ---
 
-## Authors
+## 👨‍💻 Authors
 
 - [🔗 Zapantis Nikolaos](https://github.com/NikosZapantis)
 - [🔗 Lymperi Alexandra](https://github.com/alexandralymperi)
