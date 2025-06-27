@@ -1,0 +1,19 @@
+spring.application.name={{ spring_application_name }}
+server.port={{ app_port }}
+
+spring.datasource.username={{ spring_datasource.username }}
+spring.datasource.password={{ spring_datasource.password }}
+spring.datasource.url={{ spring_datasource.url }}
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=update
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+spring.security.user.name={{ spring_security.user }}
+spring.security.user.password={{ spring_security.password }}
+
+app.jwtSecret={{ app_jwtSecret }}
+app.jwtExpirationMs={{ app_jwtExpirationMs }}

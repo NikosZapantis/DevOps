@@ -3,9 +3,6 @@
   hosts: all
   become: true
 
-  vars: #? will be moved to group_vars/azure-hosts.yaml when optimising
-    frontend_dir: /home/{{ ansible_user }}/frontend
-
   tasks:
     - name: Update apt cache and install curl
       apt:
@@ -32,17 +29,9 @@
 
     - name: Synchronize frontend folder
       synchronize:
-        src: "{{ playbook_dir }}/../App/frontend/"
+        src: "{{ playbook_dir }}/../../App/frontend/"
         dest: "{{ frontend_dir }}/"
         recursive: yes
-
-    # - name: Copy frontend files
-    #   copy:
-    #     src: "{{ playbook_dir }}/../App/frontend/"
-    #     dest: "{{ frontend_dir }}/"
-    #     mode: '0755'
-    #     owner: azureuser
-    #     group: azureuser
     
     - name: Allow others to execute /home/azureuser so nginx can access frontend
       file:
@@ -72,21 +61,22 @@
 
     - name: Copy NGINX config for Node.js app
       template:
-        src: ./reverseproxy/nginx.node.j2
-        dest: /etc/nginx/sites-available/spring
-      become: yes
+        src: ./../reverseproxy/nginx.node.j2
+        dest: "{{ nginx_sites_available_path }}/{{ nginx_node_conf_filename }}"
+      become: true
+      notify: restart nginx
 
     - name: Enable Node.js site in NGINX
       file:
-        src: /etc/nginx/sites-available/spring
-        dest: /etc/nginx/sites-enabled/spring
+        src: "{{ nginx_sites_available_path }}/{{ nginx_node_conf_filename }}"
+        dest: "{{ nginx_sites_enabled_path }}/{{ nginx_node_conf_filename }}"
         state: link
-      become: yes
+      become: true
       notify: restart nginx
 
     - name: Disable default NGINX site
       file:
-        path: /etc/nginx/sites-enabled/default
+        path: "{{ nginx_sites_enabled_path }}/default"
         state: absent
       notify: restart nginx
 
@@ -95,3 +85,4 @@
       service:
         name: nginx
         state: restarted
+      become: true

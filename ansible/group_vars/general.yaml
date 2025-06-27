@@ -1,0 +1,36 @@
+#? general variables for Ansible playbooks
+appdir: "/home/azureuser/backend/DS_crowdfunding"
+branch: main
+appuser: azureuser
+appgroup: azureuser
+app_port: 8080
+frontend_dir: /home/{{ ansible_user }}/frontend
+backend_dir: /home/{{ ansible_user }}/backend
+
+#? docker path variables
+docker_user: "{{ ansible_user }}"
+docker_project_path: "/home/{{ ansible_user }}/docker"
+
+#? nginx path variables
+nginx_sites_available_path: /etc/nginx/sites-available
+nginx_sites_enabled_path: /etc/nginx/sites-enabled
+nginx_node_conf_filename: spring
+spring_service_file: /etc/systemd/system/spring.service
+
+#? application.properties content
+spring_application_name: gotham_2wzk
+spring_datasource:
+  username: devopsuser
+  password: N7FY7oU6g0CJUaRKQ2RowWcvUXQ2SXYM
+  url: "jdbc:postgresql://dpg-d1e11aidbo4c73edt4ag-a.oregon-postgres.render.com:5432/devopsdb_cmym"
+
+spring_security:
+  user: user
+  password: user
+
+app_jwtSecret: "ZdHhly8tFaRdsn4pYJSGTSWU678of9GEQhWrTNnzgAXb3vVqdHHUs5QJoWyi87"
+app_jwtExpirationMs: 86400000
+
+#? spring service variables
+working_directory: /home/azureuser/backend/DS_crowdfunding/crowdfunding
+exec_start: "java -jar /home/azureuser/backend/DS_crowdfunding/crowdfunding/target/crowdfunding-0.0.1-SNAPSHOT.jar"

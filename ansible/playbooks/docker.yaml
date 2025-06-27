@@ -2,10 +2,6 @@
 - hosts: all
   become: true
 
-  vars:
-    docker_user: "{{ ansible_user }}"
-    docker_project_path: "/home/{{ ansible_user }}/docker"
-
   tasks:
     
     - name: Disable default NGINX site
@@ -68,32 +64,22 @@
 
     - name: Synchronize entire docker project directory
       synchronize:
-        src: "{{ playbook_dir }}/.."
+        src: "{{ playbook_dir }}/../.."
         dest: "{{ docker_project_path }}"
         recursive: yes
         delete: no
         rsync_opts:
           - "--chmod=Du=rwx,Dg=rx,Fu=rw,Fg=r,Fo=r"
 
-    # - name: Check if backend folder exists on remote
-    #   stat:
-    #     path: "{{ docker_project_path }}/App/backend"
-    #   register: backend_status
-
-    # - name: Check if frontend folder exists on remote
-    #   stat:
-    #     path: "{{ docker_project_path }}/App/frontend"
-    #   register: frontend_status
-
     - name: Synchronize backend folder
       synchronize:
-        src: "{{ playbook_dir }}/../App/backend"
+        src: "{{ playbook_dir }}/../../App/backend"
         dest: "{{ docker_project_path }}/App/backend"
         recursive: yes
 
     - name: Synchronize frontend folder
       synchronize:
-        src: "{{ playbook_dir }}/../App/frontend"
+        src: "{{ playbook_dir }}/../../App/frontend"
         dest: "{{ docker_project_path }}/App/frontend"
         recursive: yes
 
@@ -101,7 +87,7 @@
       command: docker compose down
       args:
         chdir: "{{ docker_project_path }}/docker"
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Find process using port 8080
       shell: |
@@ -112,7 +98,7 @@
     - name: Kill process using port 8080
       command: kill -9 {{ port_8080_pid.stdout }}
       when: port_8080_pid.stdout != ""
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Kill any process on port 7000
       shell: |
@@ -135,15 +121,9 @@
     - name: Kill process using port 80
       command: kill -9 {{ port_80_pid.stdout }}
       when: port_80_pid.stdout != ""
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Run docker compose 
       command: docker compose up -d
       args:
         chdir: "{{ docker_project_path }}/docker"
-
-  handlers:
-    # - name: restart nginx
-    #   service:
-    #     name: nginx
-    #     state: restarted
