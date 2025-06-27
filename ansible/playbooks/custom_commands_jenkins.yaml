@@ -27,7 +27,7 @@
       no_log: true
 
     - name: Add remote host to known_hosts 
-      shell: ssh-keyscan -H 4.212.93.102 >> {{ ssh_dir }}/known_hosts
+      shell: ssh-keyscan -H {{ ansible_host }} >> {{ ssh_dir }}/known_hosts
       args:
         creates: "{{ ssh_dir }}/known_hosts"
   
