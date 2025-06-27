@@ -38,14 +38,12 @@ The system is deployed on an **Azure Virtual Machine** using:
 
 ## Project Structure
 
-```bash
-├── App/    ← [README.md](App/README.md)
-├── ansible/    ← [README.md](ansible/README.md)
-├── docker/     ← [README.md](docker/README.md)
-├── jenkins/    ← [README.md](jenkins/README.md)
-├── kubernetes/ ← [README.md](kubernetes/README.md)
-├── README.md(README.md)
-```
+├── [App/](App/README.md)  
+├── [ansible/](ansible/README.md)  
+├── [docker/](docker/README.md)  
+├── [jenkins/](jenkins/README.md)  
+├── [kubernetes/](kubernetes/README.md)  
+└── [README.md](README.md)  
 
 ---
 
