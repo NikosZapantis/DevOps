@@ -84,7 +84,7 @@ docker/
 To deploy via Ansible (recommended for automation):
 
 ```
-ansible-playbook -i inventory.ini ansible/docker.yaml
+ansible-playbook -i inventory.ini ansible/playbooks/docker.yaml
 ```
 
 This playbook:
