@@ -63,14 +63,12 @@ The system is deployed on an **Azure Virtual Machine** using:
 2. Clone this repository on your local machine.
 3. Configure:
     - ansible/inventory.ini
-    - group_vars/all.yaml, group_vars/azure-hosts.yaml
-    - host_vars/devops-vm-1.yaml
 
 4. Run the Ansible playbook to deploy the Spring Boot + Node.js application:
 
 ```
-ansible-playbook -i ansible/inventory.ini ansible/spring.yaml
-ansible-playbook -i ansible/inventory.ini ansible/node.yaml
+ansible-playbook -i ansible/inventory.ini ansible/playbooks/spring.yaml
+ansible-playbook -i ansible/inventory.ini ansible/playbooks/node.yaml
 ```
 
 ---
