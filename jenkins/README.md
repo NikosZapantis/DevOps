@@ -10,6 +10,7 @@ This directory contains the CI/CD configuration for automating deployment, testi
 - [Requirements](#requirements)
 - [VM Setup](#vm-setup)
 - [Ports and Services](#ports-and-services)
+- [Jenkins Setup](#jenkins-setup)
 - [Pipeline Jobs](#pipeline-jobs)
     - [ansible.Jenkinsfile](#ansiblejenkinsfile)
     - [Jenkinsfile (Docker + K8s)](#jenkinsfile-docker--k8s)
@@ -42,6 +43,7 @@ The jenkins CI/CD setup includes:
   - **Git**
   - **Ansible**
 - GitHub credentials configured in Jenkins (for cloning & pushing).
+- GitHub webhooks with the VM's ip
 - Docker installed in Jenkins host (if using containerization).
 - `.ssh/<SSH_PRIVATE_KEY>` deployed to Jenkins and target VMs.
 
@@ -77,6 +79,18 @@ A new VM was created for Jenkins. The following was performed:
 
 ---
 
+## Jenkins Setup
+
+### ansible-job
+This job copies the `https://github.com/NikosZapantis/DevOps.git` ansible_only branch, to copy all the Ansible deployment related files into the VM.
+It must have a trigger to a GitHub webhook to get all the latest updates.
+
+### spring-node pipeline
+This is a pipeline script from SCM, which enables the `jenkins/ansible.Jenkinsfile` file located in the `https://github.com/NikosZapantis/DevOps.git` repository.
+It must have a trigger to a GitHub webhook to get all the latest updates.
+
+---
+
 ## Pipeline Jobs
 
 ### `ansible.Jenkinsfile`
@@ -84,9 +98,8 @@ A new VM was created for Jenkins. The following was performed:
 This pipeline automates Ansible-based deployment.
 
 ### Features:
-
 - Parameterized flags to enable/disable parts of the deployment:
-  - `INSTALL_SPRING`, `INSTALL_NODE`, `INSTALL_POSTGRES`.
+  - `INSTALL_SPRING`, `INSTALL_NODE`.
 - Pings infrastructure to ensure SSH access.
 - Calls `ansible-job` for orchestrated deployments.
 - Deploys backend (`spring.yaml`) and frontend (`node.yaml`) via Ansible.
